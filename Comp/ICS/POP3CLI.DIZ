@@ -1,0 +1,15 @@
+Pop3Cli is an application which shows
+how to use the TPop3Cli object to access
+EMail on the Internet using the POP3
+protocol (used by every ISP).
+This one is compatible with all Delphi
+version (1, 2, 3 and 4) and also 
+C++Builder (1, 3, and 4).
+The author can be contacted
+at francois.piette@pophost.eunet.be. 
+Support and updates can be found 
+at http://www.rtfm.be/fpiette.
+Unzip using the -d option to restore
+directory tree. 
+Freeware with full source code.
+

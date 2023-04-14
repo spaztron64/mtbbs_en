@@ -1,0 +1,392 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=x-sjis">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>Property 解説</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<p><font color="#FF0000"><big><strong>TMainCool, TPopupCool</strong></big></font></p>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="property Canvas : TCanvas"><font color="#0000FF">property</font> 
+Canvas : TCanvas</a>　（ 読取専用 ）</font></strong></p>
+
+<blockquote>
+  <p>Canvas プロパティは，オーナー描画メニューアイテムの OnDrawItem 
+  イベントのハンドラを実現するときに使用する描画面へのアクセスを提供します。</p>
+  <p>Canvas 
+  プロパティは，メニューアイテムの項目として使用できるグラフィックイメージを描画するのに使用します。</p>
+  <p>デフォルトでは，コンポーネントがプロパティの設定値に従い，適切な描画を行ってくれます。<br>
+  独自のオーナー描画をしたい場合に，OnDrawItemイベントハンドラ内でCanvasに描画してください。</p>
+  <p><strong>例</strong></p>
+  <p><font face="FixedSys"><font color="#0000FF">procedure</font> 
+  TForm1.PopupCool1DrawItem(Menu: TMenu; Item: TMenuItem;<br>
+  Rect: TRect; State: TOwnerDrawState);<br>
+  <font color="#0000FF">begin</font><br>
+  &nbsp;&nbsp;&nbsp; if odSelected in State then<br>
+  &nbsp;&nbsp;&nbsp; PopupCool1.Canvas.Brush.Color := clRed<br>
+  &nbsp; else<br>
+  &nbsp;&nbsp;&nbsp; PopupCool1.Canvas.Brush.Color := clBtnFace;<br>
+  &nbsp; <br>
+  &nbsp; PopupCool1.Canvas.FillRect(Rect);</font></p>
+  <p><font face="FixedSys">&nbsp; PopupCool1.Canvas.TextOut(Rect.Left + 5, Rect.Top, 
+  Item.Caption);<br>
+  <font color="#0000FF">end;</font></font></p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property ActiveFont : TFont"><font face="FixedSys"><font
+color="#0000FF">property</font> ActiveFont : TFont</font></a></strong></p>
+
+<blockquote>
+  <p>ActiveFontプロパティは，選択中のメニューアイテムのフォントを設定するためのプロパティです。DefaultFontプロパティをTrueにした場合は，ActiveFontプロパティの設定は無効になります。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property ActiveColor : TColor"><font face="FixedSys"><font
+color="#0000FF">property</font> ActiveColor : TColor</font></a></strong></p>
+
+<blockquote>
+  <p>ActiveColorプロパティは，選択中のメニューアイテムの背景色を設定するためのプロパティです。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><font face="FixedSys"><a name="property Banner : TBanner"><font color="#0000FF">property</font> 
+Banner : TBanner</a>　（TPopupCoolのみ）</font></strong></p>
+
+<blockquote>
+  <p>Bannerプロパティは，Windows95やWindowsNT4.0の「スタート」メニューに表示されるような，縦長のタイトル等を表示する領域を提供するためのプロパティです。Bannerはグラデーション表示ができます。</p>
+  <p><font face="FixedSys">TBanner = class(TPersistent)<br>
+  &nbsp; property ShowBanner: Boolean; // Bannerの表示・非表示<br>
+  &nbsp; property BannerWidth: Byte; // Bannerの幅　デフォルトは20<br>
+  &nbsp; property Caption: String; // Bannerに表示する文字列<br>
+  &nbsp; property Font: TFont; // 文字列のフォント<br>
+  &nbsp; property BottomColor: TColor; // グラデーション　下端の色<br>
+  &nbsp; property TopColor: TColor; // グラデーション　上端の色<br>
+  end;</font></p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property InActiveFont : TFont"><font face="FixedSys"><font
+color="#0000FF">property</font> InActiveFont : TFont</font></a></strong></p>
+
+<blockquote>
+  <p>InActiveFontプロパティは，非選択状態のメニューアイテムのフォントを設定するためのプロパティです。DefaultFontプロパティをTrueにした場合は，InActiveFontプロパティの設定は無効になります。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property InActiveColor : TColor"><font face="FixedSys"><font
+color="#0000FF">property</font> InActiveColor : TColor</font></a></strong></p>
+
+<blockquote>
+  <p>ActiveColorプロパティは，非選択状態のメニューアイテムの背景色を設定するためのプロパティです。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property ActiveBitmap : TBitmap"><font face="FixedSys"><font
+color="#0000FF">property</font> ActiveBitmap : TBitmap</font></a></strong></p>
+
+<blockquote>
+  <p>ActiveBitmapプロパティは，選択中のメニューアイテムの背景のビットマップを設定するためのプロパティです。ActiveBitmapプロパティがnilでない場合は，ActioveColorプロパティの設定は無視されます。</p>
+  <p>ビットマップのサイズが，表示されるメニューの領域よりも小さい場合，ビットマップは自動的にタイル表示されます。</p>
+  <p>このプロパティに大きなサイズのビットマップを使った場合，アプリケーションのサイズも大きくなります。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property InActiveBitmap : TBitmap"><font face="FixedSys"><font
+color="#0000FF">property</font> InActiveBitmap : TBitmap</font></a></strong></p>
+
+<blockquote>
+  <p>InActiveBitmapプロパティは，選択中のメニューアイテムの背景のビットマップを設定するためのプロパティです。InActiveBitmapプロパティがnilでない場合は，InActioveColorプロパティの設定は無視されます。</p>
+  <p>ビットマップのサイズが，表示されるメニューの領域よりも小さい場合，ビットマップは自動的にタイル表示されます。</p>
+  <p>このプロパティに大きなサイズのビットマップを使った場合，アプリケーションのサイズも大きくなります。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property DefaultFont : Boolean"><font face="FixedSys"><font
+color="#0000FF">property</font> DefaultFont : Boolean</font></a></strong></p>
+
+<blockquote>
+  <p>DefaultFontプロパティは，[ コントロールパネル｜画面｜デザイン]で表示されるメニューに関する設定（フォント名・サイズ）を常に使用します。このプロパティがTrueの場合，ActiveFont・InActiveFontプロパティの設定は無視されます。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><a name="property CoolMenuBar : TCoolMenuBar"><strong><font face="FixedSys"><font
+color="#0000FF">property</font> CoolMenuBar : TCoolMenuBar</font></strong></a></p>
+
+<blockquote>
+  <p>Windows98のエクスプローラーライクなメニューにしたり（TCoolBarコンポーネントと共に使います），Office97アプリケーションライクなドッカブルメニューバー（Jordan 
+  Russell氏の<a href="http://www.connect.net/jordanr/" target="_blank">Toolbar97</a>と共に使います）にするには，TCoolMenuBarコンポーネントを使います。CoolMenuBarプロパティにTCoolMenuBarコンポーネントを指定します。</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property Images : TImageList"><font face="FixedSys"><font
+color="#0000FF">property</font> Images : TImageList</font></a></strong></p>
+
+<blockquote>
+  <p>Imagesプロパティは，個々のメニューアイテムに表示するアイコンイメージのリストを提供します。アイコンファイル（32 
+  x 32），スピードボタンに表示するビットマップファイルなどをリストの中に入れておく事ができます。メニューアイテムに表示されるイメージのサイズは，LargeImageプロパティの設定にしたがって，32 
+  x 32か，16 x 16のどちらかになります。</p>
+  <p>ItemImages リストの各項目は，ImageIndex 
+  プロパティを設定することでイメージリストに入っているアイコンと関連付けることができます。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property ItemImages : TItemImages"><font face="FixedSys"><font
+color="#0000FF">property</font> ItemImages : TItemImages</font></a></strong></p>
+
+<blockquote>
+  <p><font face="FixedSys">// TItemImage コレクションアイテム==============================================<br>
+  TItemImage = class(TCollectionItem)<br>
+  public<br>
+  &nbsp; property Hint: String;<br>
+  &nbsp; property MenuItem: TMenuItem;<br>
+  &nbsp; property ImageIndex: Integer;<br>
+  end;<br>
+  <br>
+  // TItemImages コレクション ====================================================<br>
+  TItemImages = class(TCollection)<br>
+  public<br>
+  &nbsp; function Add: TItemImage;<br>
+  &nbsp; property Items[Index: Integer]: TItemImage;<br>
+  end;<br>
+  </font></p>
+  <p><font face="FixedSys">ItemImagesプロパティは，メニューアイテムの項目を表すItemImageオブジェクトに直接アクセスできます。</font></p>
+  <p><font face="FixedSys">設計時には，コンポーネントをダブルクリックして表示されるコンポーネントエディターによって，各項目のHint，MenuItem，ImageIndexを簡単に設定する事が可能です。また，Delphi標準の項目エディター（オブジェクトインスペクターから起動されます）からも追加設定することが可能です。</font></p>
+  <p><font face="FixedSys">実行時に動的に設定する場合は，addメソッドまたは，<a
+  href="methods.htm#SetItem">SetItemメソッド</a>を使います。</font></p>
+  <p><strong><font face="FixedSys">例</font></strong></p>
+  <p><font face="FixedSys"><font color="#0000FF">var<br>
+  </font>&nbsp; NewItem: TMenuItem;<br>
+  &nbsp; NewImages: TItemImage; <br>
+  <font color="#0000FF">begin<br>
+  </font>&nbsp; // 新しいMenuItemを動的に追加<br>
+  &nbsp; NewItem := TMenuItem.Create(PopupMenu1);<br>
+  &nbsp; NewItem.Caption := '新規メニュー';<br>
+  &nbsp; NewItem.OnClick := NewItemClick;<br>
+  &nbsp; PopupMenu1.Items.Add(NewItem);<br>
+  <br>
+  &nbsp; // メニューアイテムのイメージを指定する。addメソッド<br>
+  &nbsp; NewImages := PopupCool1.ItemImages.Add;<br>
+  &nbsp; // ImageListには別途イメージ(アイコン)を追加しておいてください<br>
+  &nbsp; NewImages.ImageIndex := x; <br>
+  &nbsp; NewImages.MenuItem := NewItem; <br>
+  <br>
+  &nbsp; // オーナードローの再実行（PopupCoolの場合は必ず実行してください。MainCoolの場合は必要ありません。）<br>
+  &nbsp; PopupCool1.ModifyMenuItems(PopupMenu1.Items);<br>
+  <font color="#0000FF">end;</font></font></p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property ItemHeight : Integer"><font face="FixedSys"><font
+color="#0000FF">property</font> ItemHeight : Integer</font></a></strong></p>
+
+<blockquote>
+  <p>標準のメニューアイテムの高さを設定するプロパティです。デフォルト値は20です。セパレーターの高さは自動的に10ピクセルに設定されることになっています。</p>
+  <p>メニューアイテムの高さを，個別に設定したい場合は，OnMeasureItemイベントで設定することが可能です。</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property LargeImage : Boolean"><font face="FixedSys"><font
+color="#0000FF">property</font> LargeImage : Boolean</font></a></strong></p>
+
+<blockquote>
+  <p>メニューアイテムに表示するアイコンイメージを32 x 32のアイコンサイズで表示したい場合は，Trueにします。16 
+  x 16の小さいアイコンサイズの場合は，Falseにして下さい。デフォルトはFalseです。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property Cursor : TCursor"><font face="FixedSys"><font color="#0000FF">property</font> 
+Cursor : TCursor</font></a></strong></p>
+
+<blockquote>
+  <p>マウスカーソルがメニュー上にあるときの，カーソルの形状を設定できます。デフォルトは，crDefaultです。</p>
+  <p>メニューが表示されているときに，マウスカーソルがメニューの領域上から離れると，カーソルはcrDefaultになります。<br>
+  メニュー領域上にマウスカーソルがある場合，プロパティで設定したカーソルに変わります。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property Menu : TMenu"><font face="FixedSys"><font color="#0000FF">property</font> 
+Menu : TMenu</font></a></strong></p>
+
+<blockquote>
+  <p><font face="FixedSys">設計時には，MainCoolコンポーネントの場合，フォーム上に配置されたMainMenuコンポーネントをリストから選択できるようになっています。PopupCoolコンポーネントの場合，フォーム上に配置されたPopupMenuコンポーネントがリストアップされているので，その中から選択できます。<br>
+  動的に生成するようなとき，同一フォーム上にある（そのフォームがOWner）メニューコンポーネントを指定してください。</font></p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property MenuStyle : TMenuStyle"><font face="FixedSys"><font
+color="#0000FF">property</font> MenuStyle : TMenuStyle</font></a></strong></p>
+
+<blockquote>
+  <p><font face="FixedSys">TMenuStyle = (msOffice, msWindows);</font></p>
+  <p><font face="FixedSys">MenuStyleプロパティが，msOfficeの場合，Microsoft 
+  Office97アプリケーションのように，選択状態なメニューアイテムのイメージが，ボタン表示に変わります。msWindowsの場合，Windows95やWindowsNT 
+  4.0の「スタート」メニューのように，選択状態なメニューアイテムのイメージはフルリバース（反転）表示に変わります。</font></p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><strong><a name="property ShowHint : Boolean"><font face="FixedSys"><font
+color="#0000FF">property</font> ShowHint : Boolean</font></a></strong></p>
+
+<blockquote>
+  <p>マウスカーソルによって，メニューアイテムが選択状態にあるとき，ヒントウィンドウを表示するかどうかを設定するプロパティです。</p>
+  <p>Internet Exploror 4.0 
+  のように「お気に入り」に追加したメニューアイテムのURL表示するヒントと同じことが可能になります。</p>
+  <p>表示するヒントの文字列は，<font face="FixedSys"><a
+  href="#property ItemImages : TItemImages" target="_self">ItemImagesプロパティ</a>のItemImageアイテムのHintプロパティに設定して下さい。（MenuItemのHintプロパティではありません。）コンポーネントエディター上から簡単に設定する事が可能です。複数行のヒントを表示する事もできます。</font></p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p>　</p>
+
+<p><a name="property SysMenu : TSysMenu"><strong><font face="FixedSys"><font
+color="#0000FF">property</font> SysMenu : TSysMenu</font></strong></a></p>
+
+<blockquote>
+  <p><font face="FixedSys">TSysMenu = class(TPersistent)<br>
+  private<br>
+  &nbsp; FDrawing: Boolean;<br>
+  &nbsp; FItemHeight: Integer;<br>
+  &nbsp; FMenuStyle: TMenuStyle;<br>
+  </font></p>
+  <p>Drawingプロパティは，システムメニューをオーナードローするかどうか決めます。デフォルトはFalseです。</p>
+  <p>ItemHeightプロパティは，DrawingプロパティがTrueのとき，システムメニューのアイテムの高さを決めます。</p>
+  <p>MenuStyeプロパティは，TMainCool,TPopupCoolの<a
+  href="#property MenuStyle : TMenuStyle" target="_self">MenuStyleプロパティ</a>と同じです。</p>
+  <p><font color="#FF0000">（注意）上記のプロパティは，何れも設計時のみ変更が有効です。実行時に変更するとシステムメニューの表示がおかしくなります。</font></p>
+</blockquote>
+
+<hr>
+
+<p><font color="#FF0000"><big><strong>TCoolMenuBar</strong></big></font></p>
+
+<hr>
+
+<p>　</p>
+
+<p><a name="property Menu : TMainMenu_2"><strong><font face="FixedSys"><font
+color="#0000FF">property</font> Menu : TMainMenu</font></strong></a></p>
+
+<blockquote>
+  <p>フォーム上のMainMenuコンポーネントを指定します。MainMenuのメニューバー領域のメニューアイテム項目がCoolMenuBarコンポーネントによって置換えられます。</p>
+</blockquote>
+
+<p>　</p>
+
+<hr>
+
+<p>　</p>
+
+<p><a name="property MenuCursor : TCursor"><strong><font face="FixedSys"><font
+color="#0000FF">property</font> MenuCursor : TCursor</font></strong></a></p>
+
+<blockquote>
+  <p>マウスカーソルがメニュー項目上にあるときの，マウスカーソルの形状を指定します。</p>
+</blockquote>
+
+<p>　</p>
+
+<hr>
+
+<p>　</p>
+
+<p><a name="property DefaultFont : Boolean_2"><strong><font face="FixedSys"><font
+color="#0000FF">property</font> DefaultFont : Boolean</font></strong></a></p>
+
+<blockquote>
+  <p>DefaultFontプロパティは，TMainCool,TPopupCoolの<a
+  href="#property DefaultFont : Boolean" target="_self">DefaultFontプロパティ</a>と同じです。</p>
+</blockquote>
+
+<p>　</p>
+
+<hr>
+
+<p>　</p>
+
+<p><a name="property Align : TAlign"><strong><font face="FixedSys"><font color="#0000FF">property</font> 
+Align : TAlign</font></strong></a></p>
+
+<blockquote>
+  <p>Align 
+  プロパティは，コンテナ（親コントロール）内でコントロールを揃える方法を指定します。デフォルトはalTopです。</p>
+  <p>コンテナがTCoolBarやToolBar97の場合は，alClientに設定することをお勧めします。</p>
+</blockquote>
+
+<hr>
+
+<hr>
+</body>
+</html>

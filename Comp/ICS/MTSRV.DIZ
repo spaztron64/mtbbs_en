@@ -1,0 +1,16 @@
+MTSRV is a sample program which
+demonstrate how to build a multi-threaded
+server application with TWSocket.
+Example are for Delphi and C++Builder
+(all version for both compilers)
+The author can be contacted
+at francois.piette@pophost.eunet.be. 
+Supprt and updates can be found 
+at http://www.rtfm.be/fpiette.
+Other TWSocket examples can be found on 
+the web site. Including Telnet and FTP 
+protocol component for all Delphi versions.
+Unzip using the -d option to restore
+directory tree. 
+Freeware with full source code.
+

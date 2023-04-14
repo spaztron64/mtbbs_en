@@ -1,0 +1,8 @@
+[Server]
+name= Digital Equipment Corp - Maryland, , Maryland
+server= decuac.dec.com
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

@@ -1,0 +1,8 @@
+[Server]
+name= Cybernetic Control Inc.,
+server= ftp.cybercon.nb.ca
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

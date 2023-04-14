@@ -1,0 +1,8 @@
+[Server]
+name= CNAM
+server= ftp.cnam.fr
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

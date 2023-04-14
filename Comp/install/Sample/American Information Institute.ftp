@@ -1,0 +1,8 @@
+[Server]
+name= ais.org
+server= ais.org
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

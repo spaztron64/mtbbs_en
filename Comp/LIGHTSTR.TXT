@@ -1,0 +1,153 @@
+
+     文字列リストオブジェクト　TLightStrings
+
+                                   べあ(BYI15773)
+
+この文字列リストは大量の文字列(テキストファイル)などを保持
+するためのオブジェクトです。
+
+VCLを変更するのに抵抗がある人、ＶＣＬがないひとは、LightStr
+を好きなように手を加えて使ってみてください。
+
+特徴
+ ・Objectsプロパティがない
+ 　　つまりメモりが節約できます(4Bytes/1Line)
+ ・CapacityプロパティがPublicにある
+ ・読み込み、保存にテキストファイルルーチンを使用
+ 　　メモリを節約出来るため、大きなファイルでも高速
+ ・使用法はTStringListに類似
+
+ 使い方
+ 　ライブラリに入れるなりプロジェクトのフォルダにコピーするなりして
+ 　Uses 節に　LightStr を追加します。後はTStringListとほぼ同じです
+
+
+*説明
+
+    procedure LoadFromFile(const Filename:string);virtual;
+
+  テキストファイルルーチンを使用しているため$1A(EOF)以降は読み込み
+  ません。
+  　読み込み時間はファイルサイズに比例します(スワップしなければ)
+    ファイルサイズの２乗に比例するTStringListに比べ高速です。
+  同等(小さいファイル)～10倍(1万行のファイル)～**倍
+
+
+    procedure SaveToFile(const FileName:string);virtual;
+
+  同じくテキストファイルルーチンです。
+
+
+    procedure SaveToStream(Stream:TStream);virtual;
+    procedure LoadFromStream(Stream:TStream);virtual;
+    function Add(Item:string): Integer;
+    procedure Clear;
+    procedure Delete(Index: Integer);
+    procedure Insert(Index: Integer; Item: string);
+    procedure AddStrings(Source:TStrings);
+
+  TStringListに同じ。
+
+
+    procedure Exchange(Index1, Index2: Integer);
+
+  Objectsプロパティがないため高速です TStringListの約３倍
+  この速度差はSortするときに影響がでます。
+
+
+    procedure Assign(Source:TStrings);
+
+  TStringListとほぼ同じです、Memoからのコピーは
+  Textプロパティを使うほうが速いことが多い。
+
+
+    procedure CopyTo(Dest:TStrings);
+
+  他のTStringsにコピーします。
+
+  例)
+    LightStrings.CopyTo(ListBox1.Items);
+
+
+    function IndexOf(Item: string): Integer;virtual;
+
+  高速化のため大文字小文字を区別する仕様になってます。
+  10倍近く高速です。
+
+
+    property CommaText:string read GetCommaText write SetCommaText;
+
+  TStringsのCommaTextとは違い、長さ無制限です。(Delphi2.0のTStrings.commmaTextは4KBまで)
+  但しフィールドに二重引用符'"'や改行コードが入ると異常動作します。
+    手抜きの仕様なので必要なら改変してください。
+
+
+    procedure Sort(Comp:TSortCompFunc);
+
+  ソートします。
+  例)
+
+  function SortComp(S1,S2:String):Integer;
+  begin
+    Result:=ansiCompareText(S1,S2); //降順
+    // Result:=ansiCompareText(S2,S1); 昇順
+  end;
+
+  procedure TForm1.Button1Click(Sender :TObject);
+  begin
+    LightStrings.Sort(SortComp);
+  end;
+
+
+     function Find(FindText:string;var L,C:Integer):Boolean;
+
+ 文字列リスト内で指定のテキストを検索します。
+ 英大文字、小文字は区別しません。
+ 見つかればTrue、引数は検索を開始するIndex L の C 文字目という風に
+ します、L,Cには見つかったIndex,文字カウントが入ります。
+
+ 例)
+
+ var L,C:Integer;
+ begin
+   L:=0; //先頭行から
+   C:=1; //その行の先頭バイトから
+   if LightStrings.Find('procedure',L,C) then
+     DoSomething(L,C); //何かの処理
+ end;
+
+     property Text    :string read GetTextStr write SetTextStr;
+
+　TStringsのそれと同じです。
+
+
+    property Capacity: Integer read FCapacity write SetCapacity;
+
+  文字列リストの容量です。
+
+  例)
+  var I:Integer;
+  begin
+    LightStrings.Capacity:=1000;
+    for i:=1 to 1000 do
+      LightStrings.Add(IntToStr(I));
+  end;
+
+
+    property Count   : Integer read FCount write SetCount ;
+    property Items[Index: Integer]: string read Get write Put; default;
+
+  TStringListに同じです。
+
+
+注意事項
+
+　このオブジェクトを使用したために何が起きても作者はいっさい責任
+をおいません。
+
+　特に著作権は主張しませんので、自由に使用、再配布、転載できます。
+また、改変も推奨します。ただし、改変したものの再配布は改変者の名前
+で行ってください。
+
+もしバグがあれば報告お願いします。
+

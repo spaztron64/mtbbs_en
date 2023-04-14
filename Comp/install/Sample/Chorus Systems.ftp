@@ -1,0 +1,8 @@
+[Server]
+name= Chorus Systems
+server= ftp.chorus.fr
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

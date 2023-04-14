@@ -1,0 +1,11 @@
+This is two demo programs showing
+how to use the TWSocket object (included)
+to send and receive UDP messages on the
+network. The author can be contacted
+at francois.piette@pophost.eunet.be. 
+Support and updates can be found 
+at http://www.rtfm.be/fpiette.
+Examples can be found on the web site.
+Unzip using the -d option to restore
+directory tree.
+Freeware with full source code.

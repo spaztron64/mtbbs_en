@@ -1,0 +1,8 @@
+[Server]
+name= Art +COM, Berlin
+server= ftp.artcom.de
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

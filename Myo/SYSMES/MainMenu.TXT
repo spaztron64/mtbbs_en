@@ -1,0 +1,10 @@
+MTBBS Ver %V ÅsMain MenuÅt   %T  %I / %H
+BOARD/MAIL -------------  INFORMATION ------------  OTHERS -----------------
+[N]ews  Read the news   | [A]pply   Register      | [Q]uit    Log out
+[N@]    Continuous news | [H]elp    Show cmd usage| [I]nstall More settings
+[R]ead  Read posts      | [U]sers   List members  | [W]ho     Show active users
+[E]nter Write a post    | [L]og     Show logs     | [C]hat    Chatrooms
+[K]ill  Delete a post   | pr[O]file Show profile  | [T]elegram Private msgs
+[#]     Display status  | s[Y]sinfo Show host info| e[X]who   Show active IPs
+[M]ail  Read your mail  | [_]       Show version  | [F]ile    File board
+[P]ost  Post on freechat| [S]ysop   Call SysOp    | [FN]      File news

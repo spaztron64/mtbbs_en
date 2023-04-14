@@ -1,0 +1,8 @@
+[Server]
+name= U.S. Air Force
+server= archive.afit.af.mil
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

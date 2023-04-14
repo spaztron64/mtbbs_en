@@ -1,0 +1,8 @@
+[Server]
+name= Demon
+server= ftp.demon.co.uk
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

@@ -1,0 +1,8 @@
+[Server]
+name= Compaq Computer
+server= ftp.compaq.com
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

@@ -1,0 +1,28 @@
+History of the TCP/IP component pack
+
+1997-05-21  0.1b  first published beta version, TTime, THTTP, TFTP, TSMTP,
+                  TNNTP, TPop3, TRExec, TMail, TNews, TMime, TFinger,
+                  TFingerD, Tlpr
+
+1997-06-30  0.2b  TSMTP had problems with a few SMTP server - fixed
+                  TSMTP crashed if no dialup nor LAN connection is
+                  established - hopefully fixed
+                  smtpdemo didn't reset recipient list after send - fixed
+                  TMail sets smtp.Sender only once - fixed
+                  ftp upload hangs after completion of send - fixed
+                  ftp login only worked the first time - fixed
+                  http which send #10 instead of #13#10 now supported
+                  Made ftp data transfers optionally non-blocking
+                  Made http post method runnable
+                  Implemented http authetication (Basic scheme)
+                  Didn't compile with D3 (winsock.accept) - fixed
+                  SMTP hang when no valid recipient is given - fixed
+                  Fixed Mime encoding and decoding
+                  Added Quoted-Printable support
+                  Added a lot of OnTrace calls
+                  Rewrote TMime to allow both encoding and decoding
+                  New component RSH similar to RExec
+                  RExec, RSH and Lpr now come from port 512..1023, some server
+                  need this for security reasons
+                  Renamed all components to T_..., so the Netmanage stuff
+                  can be used simultaniously (you really want this?)

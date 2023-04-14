@@ -1,0 +1,70 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=x-sjis">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>イベント解説</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<p><strong><a name="property OnDrawItem"><font face="FixedSys"><font color="#0000FF">property</font> 
+OnDrawItem</font></a></strong></p>
+
+<p><strong><font face="FixedSys">TDrawMenuItemEvent = procedure(Menu: TMenu; Item: 
+TMenuItem; Rect: TRect; State: TOwnerDrawState) of object;</font></strong></p>
+
+<blockquote>
+  <p>コンポーネントによるデフォルトの描画を使わないで，アプリケーション開発者が自由にメニューアイテムに描画することを提供するイベントです。</p>
+  <p><strong>例</strong></p>
+  <p><font face="FixedSys"><font color="#0000FF">procedure</font> 
+  TForm1.PopupCool1DrawItem(Menu: TMenu; Item: TMenuItem; Rect: TRect; State: 
+  TOwnerDrawState);<br>
+  <font color="#0000FF">begin<br>
+  </font>&nbsp; PopupCool1.Canvas.FillRect(Rect);<br>
+  &nbsp; PopupCool1.Canvas.TextOut(Rect.Left + 10, Rect.Top, Item.Caption);<br>
+  <font color="#0000FF">end;</font></font></p>
+</blockquote>
+
+<hr>
+
+<p><a name="property OnMeasureItem"><strong><font face="FixedSys"><font color="#0000FF">property</font> 
+OnMeasureItem</font></strong></a></p>
+
+<p><strong><font face="FixedSys">TMeasureMenuItemEvent = procedure(Menu: TMenu; Item: 
+TMenuItem; var Height: Integer) of object;</font></strong></p>
+
+<blockquote>
+  <p>ItemHeightプロパティの設定に依らないで，メニューアイテムの高さを設定するためのイベントです。新しく設定したい高さは，Heightに指定して返します。</p>
+  <p>個別のメニューアイテムの高さを設定することもできます。</p>
+  <p><strong>例</strong></p>
+  <p><font face="FixedSys"><font color="#0000FF">procedure</font> 
+  TForm1.PopupCool1MeasureItem(Menu: TMenu; Item: TMenuItem; var Height: Integer);<br>
+  <font color="#0000FF">begin<br>
+  </font>&nbsp; if Item.MenuIndex = 3 then<br>
+  &nbsp; Height := 100;<br>
+  <font color="#0000FF">end;<br>
+  </font></font></p>
+</blockquote>
+
+<hr>
+
+<p><a name="property OnMenuSelect"><strong><font face="FixedSys"><font color="#0000FF">property</font> 
+OnMenuSelect</font></strong></a></p>
+
+<p><strong><font face="FixedSys">TMenuSelectEvent = procedure(Item: TMenuItem; Hint: 
+String) of object;</font></strong></p>
+
+<blockquote>
+  <p>メニューアイテムが選択状態になったことを通知するイベントです。Itemは選択状態のメニューアイテムで，Hintはそのメニューアイテムに設定した，ヒント文字列です。</p>
+  <p><strong>例</strong></p>
+  <p><font face="FixedSys"><font color="#0000FF">procedure</font> 
+  TForm1.MainCool1MenuSelect(Item: TMenuItem; Hint: String);<br>
+  <font color="#0000FF">begin<br>
+  </font>&nbsp; StatusBar1.SimpleText := Item.Caption + ' : ' + Hint;<br>
+  <font color="#0000FF">end;</font></font></p>
+</blockquote>
+
+<hr>
+</body>
+</html>

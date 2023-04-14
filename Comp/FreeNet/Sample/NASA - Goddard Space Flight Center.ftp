@@ -1,0 +1,8 @@
+[Server]
+name= NASA - Goddard Space Flight Center, Greenbelt, Maryland,
+server= dftnic.gsfc.nasa.gov
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

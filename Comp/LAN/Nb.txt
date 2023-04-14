@@ -1,0 +1,31 @@
+V1.00 (may 3 1998)
+------------------
+
+Nb.pas is a Netbios unit that allows you to make
+Netbios calls according to IBM's netbios 3.0 specs.
+
+It is equivalent to the Delphi 3.0x Nb30.pas unit, except that it
+also compiles for 16 bit Delphi 1, and 32-bit Delphi 2 and 3.
+
+The sample project shows you how to get the MAC address of a network
+interface using Netbios calls. It should work on any networked PC running
+a Microsoft Windows network, regardless of the protocol used (Netbios
+running over TCP/IP, Netbeui or IPX).
+
+If you need this stuff, then you should know what I am talking about anyway.
+
+V1.01 (may 15 1998)
+-------------------
+
+"kanca" <kanca@ibm.net> discovered that the 32-bit version
+did not work on Windows NT 4.
+
+I now changed the 32-bit code so that it :
+
+	- enumerates all adapters in the system
+	- gets the corresponding MAC address
+	- works on Windows NT 4.0
+
+
+Danny Heijl.
+Danny.Heijl@cevi.be

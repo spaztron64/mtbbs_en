@@ -1,0 +1,40 @@
+unit Main;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, UserList;
+
+type
+  TForm1 = class(TForm)
+    UserList1: TUserList;
+    BitBtn1: TBitBtn;
+    ListBox1: TListBox;
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.DFM}
+
+procedure TForm1.BitBtn1Click(Sender: TObject);
+var
+  i : Integer;
+begin
+  UserList1.SetItems;
+  for i:=0 to UserList1.Count-1 do
+  begin
+    UserList1.Index := i;
+    ListBox1.Items.Add( UserList1.UserName );
+  end;
+end;
+
+end.

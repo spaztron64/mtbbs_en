@@ -1,0 +1,19 @@
+This is a very very basic server showing how to use the TWSocket 
+object to build custom internet or intranet applications.
+
+There are 3 directories: a main directory with the project source 
+files and two directories with the TWSocket VCL: one for 
+Delphi 1 (VC) and one for Delphi 2 (VC32). Use the PKUNZIP -d option
+to unzip the archive or you will mess up all files !
+
+Once it is unzipped, you must install WSocket and Wait components 
+in Delphi compomnent palette as you do with any other VCL. Then 
+you can rebuild all the files.
+
+If you like my code, let me know. I'll keep you informed for 
+future updates.
+My EMail addresses are: 
+francois.piette@ping.be
+francois.piette@f2202.n293.z2.fidonet.org
+BBS: +32-4-365.13.95
+Fax: +32-4-365.74.56

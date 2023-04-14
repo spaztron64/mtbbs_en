@@ -1,0 +1,8 @@
+y Name zPC-9800 Central Bulletin Board
+y SysOp zspaztron64
+y Line zTelnet (up to 99 channels)
+y Host z
+y        z‚l‚s‚a‚a‚r Version 3.02
+y Members z‚Ol (00/00/00Œ»İ)
+y How to join zAccount registration on Telnet or WWW
+y Services zMailAMessage boardsAFile boardsAPMsAChat.. etc

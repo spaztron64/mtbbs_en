@@ -1,0 +1,16 @@
+FtpCli.pas is a native Delphi component
+which implement FTP client protocol
+(send and receive). It is compatible
+with ALL Delphi version (1 to 4) and
+C++ Builder (1 to 4). Thanks
+to the TWSocket object which encapsulates
+Winsock for both 16 and 32 bits windows,
+Delphi and C++ Builer.
+The author can be contacted
+at francois.piette@pophost.eunet.be. 
+Support and updates can be found at 
+http://www.rtfm.be/fpiette.
+Examples can be found on the web site.
+Unzip using the -d option to restore
+directory tree. 
+Freeware with full source.

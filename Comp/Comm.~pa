@@ -1,0 +1,829 @@
+unit Comm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Dsgnintf;                                 // プロパティエディター用
+
+const
+  ASCII_XON  = $11;                         // XON文字
+  ASCII_XOFF = $13;                         // XOFF文字
+
+  dcb_OutxCtsFlow   = $00000004;
+  dcb_OutxDsrFlow   = $00000008;
+  dcb_Dtr_Enable    = $00000010;
+  dcb_Dtr_Handshake = $00000020;
+  dcb_OutX          = $00000100;
+  dcb_InX           = $00000200;
+  dcb_Rts_Enable    = $00001000;
+  dcb_Rts_Handshake = $00002000;
+  dcb_Rts_Toggle    = $00003000;
+
+type
+  TCommParityBits = (cpbNone, cpbOdd, cpbEven, cpbMark, cpbSpace);
+  TCommByteSize = (cbs4, cbs5, cbs6, cbs7, cbs8);
+  TCommStopBits = (csb1, csb15, csb2);
+  TCommFlowControl = (cfcDtrDsr, cfcRtsCts, cfcXonXoff);
+  TCommFlowControls = set of TCommFlowControl;
+  TCommEvents = (evRxchar, evRxflag, evTxempty, evCts, evDsr,
+                 evRlsd, evBreak, evErr, evRing, evPerr);
+  TCommEventMask = set of TCommEvents;
+
+
+  { プロパティエディター }
+  TBaudProperty = class(TIntegerProperty)
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    function GetValue: string; override;
+    procedure SetValue(const Value: string); override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+
+  { 通信エラーのための例外処理クラス }
+  ECommError = class(Exception);
+  ECommOpenError = class(ECommError)
+  private
+    FErrorCode: Integer;
+  public
+    constructor Create(OpenErrorCode: Integer);
+    property ErrorCode: Integer read FErrorCode;
+  end;
+  ECommReadWriteError = class(ECommError)
+  private
+    FErrorCode: DWord;
+  public
+    constructor Create(ReadWriteErrorCode: DWord);
+    property ErrorCode: DWord read FErrorCode;
+  end;
+
+
+  { 通信イベントのためのメソッド型 }
+  TCommNotifyEvent = procedure (Sender: TObject; EventMask: TCommEventMask)
+                            of object;
+  TCommNotifyRxTxEvent = procedure (Sender: TObject; Size: Word)
+                                of object;
+
+
+  { 受信スレッドのクラス }
+  TCommWatch = class(TThread)
+  private
+    FComDev: THandle;                       // 通信デバイス・ハンドル
+    FOwner: TComponent;                     // 親コンポーネント(= TComm)
+  protected
+    procedure Execute; override;            // スレッドのメイン処理
+  public
+                                            // スレッドのコンストラクタ
+    constructor Create(AOwner: TComponent; ComDev: THandle);
+  end;
+
+
+  { 通信コンポーネントのクラス }
+  TComm = class(TComponent)
+  private
+    FHandle: THandle;                        // 通信デバイス・ハンドル
+    FDCB: TDCB;                              // 通信デバイス制御ブロック
+    FPort: Byte;                             // 通信ポート番号
+    FBaudRate: Integer;                      // 通信速度(bps)
+    FBaudRateUserDefined: DWord;             // ﾕｰｻﾞｰ定義通信速度
+    FByteSize: TCommByteSize;                // データビット長
+    FParityBits: TCommParityBits;            // パリティービット長
+    FStopBits: TCommStopBits;                // ストップビット長
+    FFlowControls: TCommFlowControls;        // フロー制御
+
+    FInQueueSize: Word;                      // 受信バッファーサイズ
+    FOutQueueSize: Word;                     // 送信バッファーサイズ
+    FReceiveNotifySize: Integer;             // 受信バッファー通知バイト数
+    FSendNotifySize: Integer;                // 送信バッファー通知バイト数
+    FEventMask: TCommEventMask;              // 通信イベントマスク
+
+    FOnCommEvent: TCommNotifyEvent;          // 通信イベントの発生
+    FOnCommReceive: TCommNotifyRxTxEvent;    // 受信イベント
+    FOnCommTransmit: TCommNotifyRxTxEvent;   // 送信イベント
+
+    FReadOs: TOverlapped;                    // 受信用オーバーラップ構造体
+
+    FThread: TCommWatch;                     // 受信イベント監視スレッド
+
+    procedure SetBaudRate(Value: Integer);
+    procedure SetBaudRateUserDefined(Value: Word);
+    procedure SetParityBits(Value: TCommParityBits);
+    procedure SetByteSize(Value: TCommByteSize);
+    procedure SetStopBits(Value: TCommStopBits);
+    procedure SetFlowControls(Value: TCommFlowControls);
+    procedure SetReceiveNotifySize(Value: Integer);
+    procedure SetSendNotifySize(Value: Integer);
+    procedure SetEventMask(Value: TCommEventMask);
+    function GetDsrState: Boolean;
+
+  protected
+    procedure DoCommEvent(EvtMask: DWord); virtual;
+    procedure DoCommReceive; virtual;
+    procedure DoCommTransmit; virtual;
+
+  public
+
+    FWriteOs: TOverlapped;                   // 送信用オーバーラップ構造体
+
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Open;
+    procedure Close;
+    procedure Write(const Buffer; Size: Integer);
+    procedure Read(Buffer: PChar; Size: Integer);
+    procedure SendString(S: string);
+    procedure SendBreak;
+    property Handle: THandle read FHandle;
+
+  published
+    property Port: Byte read FPort write FPort default 1;
+    property BaudRate: Integer read FBaudRate write SetBaudRate
+                default 9600;
+    property BaudRateUserDefined: DWord read FBaudRateUserDefined
+                write FBaudRateUserDefined default 9600;
+    property ParityBits: TCommParityBits read FParityBits write SetParityBits
+                default cpbNone;
+    property ByteSize: TCommByteSize read FByteSize write SetByteSize
+                default cbs8;
+    property StopBits: TCommStopBits read FStopBits write SetStopBits
+                default csb1;
+    property FlowControls: TCommFlowControls read FFlowControls
+                write SetFlowControls default [cfcRtsCts];
+
+    property InQueueSize: Word read FInQueueSize write FInQueueSize
+                default 4096;
+    property OutQueueSize: Word read FOutQueueSize write FOutQueueSize
+                default 4096;
+    property ReceiveNotifySize: Integer read FReceiveNotifySize
+                write SetReceiveNotifySize default 3072;
+    property SendNotifySize: Integer read FSendNotifySize
+                write SetSendNotifySize default 1024;
+    property EventMask: TCommEventMask read FEventMask write SetEventMask
+                default [];
+
+    property DsrState: Boolean read GetDsrState;
+
+    property OnCommEvent: TCommNotifyEvent read FOnCommEvent
+                write FOnCommEvent;
+    property OnCommReceive: TCommNotifyRxTxEvent read FOnCommReceive
+                write FOnCommReceive;
+    property OnCommTransmit: TCommNotifyRxTxEvent read FOnCommTransmit
+                write FOnCommTransmit;
+
+  end;
+
+
+procedure Register;
+
+implementation
+
+
+{ オブジェクトの生成 }
+constructor TComm.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  // 初期値の設定
+  FHandle := -1;                            // 通信デバイス・ハンドル
+  FPort := 1;                               // 通信ポート
+  FBaudRate := 9600;                        // 通信速度
+  FBaudRateUserDefined := 9600;             // ユーザー定義通信速度
+  FByteSize := cbs8;                        // データビット長
+  FParityBits := cpbNone;                   // パリティービット長
+  FStopBits := csb1;                        // ストップビット長
+  FFlowControls := [cfcRtsCts];             // フロー制御
+  FInQueueSize := 4096;                     // 受信バッファー長
+  FOutQueueSize := 4096;                    // 送信バッファー長
+  FReceiveNotifySize := 3072;               // XOFF送信限界
+  FSendNotifySize := 1024;                  // XON送信限界
+  FEventMask := [];                         // イベントマスク
+  FDCB.DCBLength := SizeOf(FDCB);           // デバイス制御ブロック長の設定
+end;
+
+{ オブジェクトの破棄 }
+destructor TComm.Destroy;
+begin
+  if FHandle >= 0 then                      // 通信中ならクローズする
+    Close;
+  inherited Destroy;
+end;
+
+
+{----- プロパティ関連関数群 ----------------------------------------}
+
+
+{ 通信速度の設定 }
+procedure TComm.SetBaudRate(Value: Integer);
+begin
+  FBaudRate := Value;
+  if FHandle >= 0 then
+  begin
+    GetCommState(FHandle, FDCB);
+    if FBaudRate <> -1 then                 // ﾕｰｻﾞｰ定義でない場合
+      FDCB.BaudRate := FBaudRate
+    else
+      FDCB.BaudRate := FBaudRateUserDefined;
+    SetCommState(FHandle, FDCB);
+  end;
+end;
+
+
+{ ユーザー指定通信速度の設定 }
+procedure TComm.SetBaudRateUserDefined(Value: Word);
+begin
+  FBaudRateuserDefined := Value;
+  SetBaudRate(-1);
+end;
+
+
+{ 送受信するバイトデータのビット数の設定 }
+procedure TComm.SetByteSize(Value: TCommByteSize);
+begin
+  FByteSize := Value;                       // 内部変数に保存
+  if FHandle >= 0 then                      // 通信がオープンされていたら
+  begin
+    GetCommState(FHandle, FDCB);            // 現在のTDCBの取得
+    FDCB.ByteSize := 4 + Ord(FByteSize);    // 順序数に４を足して４から８に
+    SetCommState(FHandle, FDCB);            // 新しいTDCBをセット
+  end;
+end;
+
+
+{ パリティービット数の設定 }
+procedure TComm.SetParityBits(Value: TCommParityBits);
+begin
+  FParityBits := Value;                     // 内部変数に保存
+  if FHandle >= 0 then                      // 通信がオープンされていたら
+  begin
+    GetCommState(FHandle, FDCB);            // 現在のTDCBの取得
+    FDCB.Parity := Ord(FParityBits);        // 順序数をそのまま設定
+    SetCommState(FHandle, FDCB);            // 新しいTDCBをセット
+  end;
+end;
+
+
+{ ストップビット数の設定 }
+procedure TComm.SetStopBits(Value: TCommStopBits);
+begin
+  FStopBits := Value;                       // 内部変数に保存
+  if FHandle >= 0 then                      // 通信がオープンされていたら
+  begin
+    GetCommState(FHandle, FDCB);            // 現在のTDCBの取得
+    FDCB.StopBits := Ord(FStopBits);        // 順序数をそのまま設定
+    SetCommState(FHandle, FDCB);            // 新しいTDCBをセット
+  end;
+end;
+
+
+{ フロー制御方式の設定 }
+procedure TComm.SetFlowControls(Value: TCommFlowControls);
+begin
+  FFlowControls := Value;                   // 内部変数に保存
+  if FHandle >= 0 then                      // 通信がオープンされていたら
+  begin
+    GetCommState(FHandle, FDCB);
+    FDCB.Flags := FDCB.Flags and $FEC0C003; // fOutxCtsFlow
+                                            // fOutxDsrFlow
+                                            // fDtrControl
+                                            // fOutX, fInX
+                                            // fRtsControl をオフにする
+
+    if cfcRtsCts in FFlowControls then      // RTS/CTSフロー制御の場合
+      FDCB.Flags := FDCB.Flags or dcb_OutxCtsFlow or
+                    dcb_Rts_Handshake
+    else
+      FDCB.Flags := FDCB.Flags or dcb_Rts_Enable;
+
+    if cfcDtrDsr in FFlowControls then      // DTR/DSRフロー制御の場合
+      FDCB.Flags := FDCB.Flags or dcb_OutxDsrFlow or
+                    dcb_Dtr_Handshake
+    else
+      FDCB.Flags := FDCB.Flags or dcb_Dtr_Enable;
+
+    if cfcXonXoff in FFlowControls then     // XON/XOFFフロー制御の場合
+      FDCB.Flags := FDCB.Flags or dcb_OutX or dcb_InX;
+    FDCB.XonChar := Char(ASCII_XON);
+    FDCB.XoffChar := Char(ASCII_XOFF);
+
+    FDCB.Flags := FDCB.Flags or $00000003;   // fBinary & fParity;
+    SetCommState(FHandle, FDCB);
+  end;
+end;
+
+
+{ 受信バッファの通知サイズの設定 }
+procedure TComm.SetReceiveNotifySize(Value: Integer);
+begin
+  FReceiveNotifySize := Value;              // 内部変数に保存
+  if FHandle >= 0 then                      // 通信がオープンされているなら
+  begin
+    GetCommState(FHandle, FDCB);            // 現在のTDCBの取得
+    FDCB.XoffLim := FInQueueSize - FReceiveNotifySize;
+    SetCommState(FHandle, FDCB);            // 新しいTDCBのセット
+  end;
+end;
+
+
+{ 送信バッファの通知サイズの設定 }
+procedure TComm.SetSendNotifySize(Value: Integer);
+begin
+  FSendNotifySize := Value;                 // 内部変数に保存
+  if FHandle >= 0 then                      // 通信がオープンされているなら
+  begin
+    GetCommState(FHandle, FDCB);            // 現在のTDCBの取得
+    FDCB.XonLim := FSendNotifySize;         // 新しい値の設定
+    SetCommState(FHandle, FDCB);            // 新しいTDCBのセット
+  end;
+end;
+
+
+{ 通信イベントマスクの設定 }
+procedure TComm.SetEventMask(Value: TCommEventMask);
+var
+  dwEvtMask: DWORD;
+begin
+  FEventMask := Value;                      // 内部変数に保存
+  if FHandle >= 0 then                      // 通信がオープンされているなら
+  begin
+    dwEvtMask := 0;                         // イベントマスクを初期化
+    if evRxchar in FEventMask then          // 文字受信イベント
+      dwEvtMask := dwEvtMask or EV_RXCHAR;
+    if evRxflag in FEventMask then          // イベント文字の受信
+      dwEvtMask := dwEvtMask or EV_RXFLAG;
+    if evTxEmpty in FEventMask then         // 送信バッファが空
+      dwEvtMask := dwEvtMask or EV_TXEMPTY;
+    if evCts in FEventMask then             // CTS信号の変化
+      dwEvtMask := dwEvtMask or EV_CTS;
+    if evDsr in FEventMask then             // DSR信号の変化
+      dwEvtMask := dwEvtMask or EV_DSR;
+    if evRlsd in FEventMask then            // RLSD(CD)信号の変化
+      dwEvtMask := dwEvtMask or EV_RLSD;
+    if evBreak in FEventMask then           // ブレークの検出
+      dwEvtMask := dwEvtMask or EV_BREAK;
+    if evErr in FEventMask then             // 回線状態エラー
+      dwEvtMask := dwEvtMask or EV_ERR;
+    if evRing in FEventMask then            // 電話が掛かってきた
+      dwEvtMask := dwEvtMask or EV_RING;
+    if evPerr in FEventMask then            // プリンタエラー？
+      dwEvtMask := dwEvtMask or EV_PERR;
+    SetCommMask(FHandle, dwEvtMask);        // 通信イベントマスクの設定
+  end;
+end;
+
+
+{ DSR信号の状況を取得する        }
+{ True: DSR ON,   False: DSR OFF }
+function TComm.GetDsrState: Boolean;
+var
+  ModemStat: DWORD;
+begin
+  if FHandle >= 0 then                      // 通信がオープンされていたら
+  begin
+    GetCommModemStatus(FHandle, ModemStat); // モデムステータスの取得
+    Result := ((ModemStat and MS_DSR_ON) = MS_DSR_ON);
+  end
+  else
+    Result := False;
+end;
+
+
+{ 通信イベント発生 }
+procedure TComm.DoCommEvent(EvtMask: DWord);
+var
+  EventMask: TCommEventMask;
+begin
+  //通信中でOnCommEventが設定されている場合
+  if (FHandle >= 0) and Assigned(FOnCommEvent) then
+  begin
+    EventMask := [];                            // イベントマスクの初期化
+    if (EvtMask and EV_BREAK)  = EV_BREAK  then // EV_BREAK   ブレーク信号受信
+      EventMask := EventMask + [evBreak];
+    if (EvtMask and EV_CTS  )  = EV_CTS    then // EV_CTS     CTS信号の変化
+      EventMask := EventMask + [evCts];
+    if (EvtMask and EV_DSR  )  = EV_DSR    then // EV_DSR     DSR信号の変化
+      EventMask := EventMask + [evDsr];
+    if (EvtMask and EV_ERR  )  = EV_ERR    then // EV_ERR     回線状態エラー
+      EventMask := EventMask + [evErr];
+    if (EvtMask and EV_RING )  = EV_RING   then // EV_RING    RI信号検知
+      EventMask := EventMask + [evRing];
+    if (EvtMask and EV_RLSD )  = EV_RLSD   then // EV_RLSD    RLSD信号の変化
+      EventMask := EventMask + [evRlsd];
+    if (EvtMask and EV_RXFLAG) = EV_RXFLAG then // EV_RXFLAG  イベント文字受信
+      EventMask := EventMask + [evRxFlag];
+    FOnCommEvent(self, EventMask);
+  end;
+end;
+
+
+{ データ受信イベント発生 }
+procedure TComm.DoCommReceive;
+var
+  dwErrors: DWord;
+  Stat: TComStat;
+begin
+  if (FHandle >= 0) and Assigned(FOnCommReceive) then
+  begin
+    ClearCommError(FHandle, dwErrors, @Stat);
+    if Stat.cbInQue > 0 then
+      FOnCommReceive(Self, Stat.cbInQue);
+    ClearCommError(FHandle, dwErrors, @Stat);
+  end;
+end;
+
+
+{ 送信バッファ空きイベント発生 }
+procedure TComm.DoCommTransmit;
+var
+  dwErrors: DWord;
+  Stat: TComStat;
+begin
+  if (FHandle >= 0) and Assigned(FOnCommTransmit) then
+  begin
+    ClearCommError(FHandle, dwErrors, @Stat);
+    FOnCommTransmit(Self, Stat.cbOutQue);
+  end;
+end;
+
+
+{----- 通信本体関数群 ----------------------------------------------}
+
+
+{ 通信ポートのオープン }
+procedure TComm.Open;
+var
+  szPort: array [0..9] of Char;             // ポート名
+  CommTimeouts: TCommTimeouts;              // タイムアウト構造体
+begin
+  if FHandle < 0 then                       // 通信中でない時
+  begin
+    FReadOs.Offset := 0;                    // 受信オーバーラップ処理用
+    FReadOs.OffsetHigh := 0;
+                                            // イベントオブジェクトの作成
+    FReadOs.hEvent := CreateEvent(nil,      // ハンドルを継承しない
+                                  True,     // 手動リセットイベント
+                                  False,    // 非シグナル状態で初期化
+                                  nil);     // イベントオブジェクトの名前
+    if FReadOs.hEvent = 0 then
+      raise ECommOpenError(-2);             // イベントが作成できない
+
+    FWriteOs.Offset := 0;                   // 送信オーバーラップ処理用
+    FWriteOs.OffsetHigh := 0;
+                                            // イベントオブジェクトの作成
+    FWriteOs.hEvent := CreateEvent(nil,     // ハンドルを継承しない
+                                   True,    // 手動リセットイベント
+                                   False,   // 非シグナル状態で初期化
+                                   nil);    // イベントオブジェクトの名前
+    if FWriteOs.hEvent = 0 then
+    begin
+      CloseHandle(FReadOs.hEvent);          // 受信用イベントのクローズ
+      raise ECommOpenError(-3);             // イベントが作成できない
+    end;
+
+    StrPCopy(szPort, 'COM'+ IntToStr(FPort));      // ポート名の作成
+    FHandle := CreateFile(szPort,                  // ポート名
+                          GENERIC_READ or GENERIC_WRITE,
+                          0,                       // 排他的使用(*)
+                          nil,                     // セキュリティー属性なし
+                          OPEN_EXISTING,           // 既存(*)
+                          FILE_ATTRIBUTE_NORMAL or // 通常
+                          FILE_FLAG_OVERLAPPED,    // オーバーラップ入出力
+                          0);                      // テンプレートなし(*)
+    if FHandle < 0 then                     // エラー発生時
+      raise ECommOpenError.Create(FHandle); // 例外の生成
+
+    // 送受信バッファーサイズの設定
+    SetupComm(FHandle, FInQueueSize, FOutQueueSize);
+
+    // すべてのバッファー情報を破棄する
+    PurgeComm(FHandle, PURGE_TXABORT or
+                       PURGE_RXABORT or
+                       PURGE_TXCLEAR or
+                       PURGE_RXCLEAR);
+
+    // タイムアウトのセットアップ
+    CommTimeouts.ReadIntervalTimeout := MAXDWORD;
+    CommTimeouts.ReadTotalTimeoutMultiplier := 0;
+    CommTimeouts.ReadTotalTimeoutConstant := 1000;
+    CommTimeouts.WriteTotalTimeoutMultiplier := 0;
+    CommTimeouts.WriteTotalTimeoutConstant := 1000;
+    SetCommTimeouts(FHandle, CommTimeouts);
+
+    // 通信環境の設定
+    SetBaudRate(FBaudRate);                 // 通信速度
+    SetByteSize(FByteSize);                 // データビット数
+    SetParityBits(FParityBits);             // パリティービット数
+    SetStopBits(FStopBits);                 // ストップビット数
+
+    SetFlowControls(FFlowControls);         // フロー制御
+    SetReceiveNotifySize(FReceiveNotifySize);
+    SetSendNotifySize(FSendNotifySize);
+
+    SetEventMask(FEventMask);               // イベントマスク
+
+    FThread := TCommWatch.Create(Self, FHandle);
+                                            // 受信監視スレッドの起動
+
+    EscapeCommFunction(FHandle, SETDTR);    // DTRをオンにする
+  end;
+end;
+
+
+{ 通信ポートのクローズ }
+procedure TComm.Close;
+begin
+  if FHandle >= 0 then
+  begin
+    SetCommMask(FHandle, 0);                // 通知イベントをクリアして
+                                            // スレッドを終了させる
+    while FThread.Terminated = True do;     // スレッドの終了を待つ
+
+    EscapeCommFunction(FHandle, CLRDTR);    // DTRをオフにする
+
+    // すべてのバッファー情報を破棄する
+    PurgeComm(FHandle, PURGE_TXABORT or
+                       PURGE_RXABORT or
+                       PURGE_TXCLEAR or
+                       PURGE_RXCLEAR);
+
+    CloseHandle(FHandle);                   // シリアル通信のクローズ
+    FHandle := -1;                          // 再度オープンするため
+
+    CloseHandle(FReadOs.hEvent);            // 受信イベントのクローズ
+    Closehandle(FWriteOs.hEvent);           // 送信イベントのクローズ
+  end;
+end;
+
+
+{ データの送信 }
+procedure TComm.Write(const Buffer; Size: Integer);
+var
+  dwError: DWord;
+  Stat: TComStat;
+  dwBytesWritten: DWord;
+begin
+  if FHandle < 0 then
+    raise ECommError.Create('通信が開始されていない。');
+
+  if FOutQueueSize < Size then
+    raise ECommError.Create('送信データ長が長すぎる。');
+
+  repeat                                    // 送信キューが空くのを待つ
+//    Application.ProcessMessages;          // これがあると送信が逆転する
+    ClearCommError(FHandle, dwError, @Stat);
+  until (FOutQueueSize - Stat.cbOutQue) >= Size;
+
+  if not WriteFile(FHandle, Buffer, Size, dwBytesWritten, @FWriteOs) then
+  begin
+    if GetLastError = ERROR_IO_PENDING then // オーバーラップ処理時
+    begin
+      while not GetOverlappedResult(FHandle, FWriteOs,
+                  dwBytesWritten, True) do
+      begin
+        if GetLastError = ERROR_IO_INCOMPLETE then  // まだ完了しない
+          Continue
+        else
+        begin
+          ClearCommError(FHandle, dwError, @Stat);
+          Break;
+        end;
+      end;
+    end
+    else
+    begin                                   // その他のエラー発生
+      ClearCommError(FHandle, dwError, @Stat);
+      raise ECommReadWriteError.Create(dwError);
+    end;
+  end;
+end;
+
+
+{ データの受信 }
+procedure TComm.Read(Buffer: PChar; Size: Integer);
+var
+  dwError: DWord;
+  Stat: TComStat;
+  dwLength: DWord;
+begin
+  if FHandle < 0 then
+    raise ECommError.Create('通信が開始されていない。');
+
+  ClearCommError(FHandle, dwError, @Stat);
+  dwlength := Size;
+  if not ReadFile(FHandle, Buffer^, Size, dwLength, @FReadOs) then
+  begin
+    if GetLastError = ERROR_IO_PENDING then // オーバーラップ処理の場合
+    begin
+      while not GetOverlappedResult(FHandle, FReadOs, dwlength, True) do
+      begin
+        if GetLastError = ERROR_IO_INCOMPLETE then   // 処理未完了の場合
+          Continue
+        else
+        begin
+          ClearCommError(FHandle, dwError, @Stat);
+          Break;
+        end;
+      end;
+    end
+    else
+    begin                                   // その他のエラー発生
+      ClearCommError(FHandle, dwError, @Stat);   // エラーをクリア
+      raise ECommReadWriteError.Create(dwError); // 例外の生成
+    end;
+  end;
+end;
+
+
+{ 文字列の送信 }
+procedure TComm.SendString(S: string);
+var
+  Buf: PChar;
+  Size: Integer;
+begin
+  Size := Length(S);                        // 文字列長
+  Buf := AllocMem(Size + 1);                // PCharバッファの確保
+  CopyMemory(Buf, PChar(S), Size);          // stringからPCharにコピー
+  Write(Buf^, Length(S));                   // 送信処理
+  FreeMem(Buf,Size+1);                      // メモリの解放
+end;
+
+
+{ ブレークの送信 }
+procedure TComm.SendBreak;
+var
+CurrentTime: DWord;
+begin
+  if not SetCommBreak(FHandle) then
+    raise ECommReadWriteError.Create(GetLastError);
+  CurrentTime := GetTickCount;
+  while GetTickCount - CurrentTime < 500 do
+    Application.ProcessMessages;
+  ClearCommBreak(FHandle);
+end;
+
+
+{ 受信スレッド関数 }
+{ 受信スレッド　開始処理 }
+constructor TCommWatch.Create(AOwner: TComponent; ComDev: THandle);
+var
+  dwEvtMask: DWORD;
+begin
+  inherited Create(True);                   // サスペンド状態で作成
+  FOwner := AOwner;                         // オーナーの保存
+  FComDev := ComDev;                        // 通信ハンドルの保存
+
+  // 受信文字イベントをセットする
+  GetCommMask(FComDev, dwEvtMask);          // 現在の通信イベントマスクの取得
+  dwEvtMask := dwEvtMask or EV_RXCHAR;      // 受信文字イベントを追加
+  SetCommMask(FComDev, dwEvtMask);          // 新しい通信イベントマスクの設定
+  Resume;                                   // スレッドの実行開始
+end;
+
+
+{ 受信スレッド　メイン処理 }
+procedure TCommWatch.Execute;
+var
+  dwEvtMask: DWORD;
+begin
+  while True do                             // 接続中はループする
+  begin
+    dwEvtMask := 0;
+    WaitCommEvent(FComDev, dwEvtMask, nil); // 通信イベント発生の待機
+    try
+      if (dwEvtMask and EV_RXCHAR) = EV_RXCHAR then
+        TComm(FOwner).DoCommReceive         // EV_RXCHAR  文字受信
+      else if (dwEvtMask and EV_TXEMPTY) = EV_TXEMPTY then
+        TComm(FOwner).DoCommTransmit        // EV_TXEMPTY 送信バッファーが空
+      else if dwEvtMask <> 0 then
+        TComm(FOwner).DoCommEvent(dwEvtMask)// EV_BREAK   ブレーク信号受信
+                                            // EV_CTS     CTS信号の変化
+                                            // EV_DSR     DSR信号の変化
+                                            // EV_ERR     回線状態エラー
+                                            // EV_RING    RI信号検知
+                                            // EV_RLSD    RLSD信号の変化
+                                            // EV_RXFLAG  イベント文字受信
+      else                                  // ループから抜け出す
+        Break;
+    except
+      Application.HandleException(self);    // イベントハンドラーで例外発生
+    end;
+  end;
+  FreeOnTerminate := True;                  // 終了時オブジェクトを破棄
+end;
+
+
+{----- エラー表示関数群 --------------------------------------------}
+
+
+{ オープンエラーの表示 }
+constructor ECommOpenError.Create(OpenErrorCode: Integer);
+var
+  msg: string;
+begin
+  FErrorCode := OpenErrorCode;
+  msg := Format('オープンエラー ErrorCode = %d', [FErrorCode]);
+  inherited Create(msg);
+end;
+
+
+{ 入出力エラーの表示 }
+constructor ECommReadWriteError.Create(ReadWriteErrorCode: DWord);
+var
+  msg: string;
+begin
+  FErrorCode := ReadWriteErrorCode;
+  msg := Format('入出力エラー ErrorCode = %d', [FErrorCode]);
+  inherited Create(msg);
+end;
+
+
+{----- プロパティエディタ関数群 ------------------------------------}
+
+
+{ BaurRateプロパティのプロパティエディタ }
+type
+  TBaudEntry = record
+    Value: Integer;
+    name: string;
+  end;
+
+const
+  BaudEntry: array [1..14] of TBaudEntry = (
+      (Value: CBR_110;    Name: '   110bps'),
+      (Value: CBR_300;    Name: '   300bps'),
+      (Value: CBR_600;    Name: '   600bps'),
+      (Value: CBR_1200;   Name: '  1200bps'),
+      (Value: CBR_2400;   Name: '  2400bps'),
+      (Value: CBR_4800;   Name: '  4800bps'),
+      (Value: CBR_9600;   Name: '  9600bps'),
+      (Value: CBR_14400;  Name: ' 14400bps'),
+      (Value: CBR_19200;  Name: ' 19200bps'),
+      (Value: CBR_38400;  Name: ' 38400bps'),
+      (Value: CBR_56000;  Name: ' 56000bps'),
+      (Value: CBR_128000; Name: '128000bps'),
+      (Value: CBR_256000; Name: '256000bps'),
+      (Value: -1;         Name: 'ﾕｰｻﾞｰ定義'));
+
+
+{ プロパティの種別を返す }
+function TBaudProperty.GetAttributes: TPropertyAttributes;
+begin
+  Result := [paValueList];
+end;
+
+{ 列挙型の値を文字列に変換する }
+function TBaudProperty.GetValue: string;
+var
+  i: Integer;
+  v: Integer;
+begin
+  v := GetOrdValue;                         // 列挙型の値の取得
+                                            // テーブルを探索
+  for i := Low(BaudEntry) to High(BaudEntry) do
+  begin
+    if v = BaudEntry[i].Value then          // 等しい値が見つかった
+    begin
+      Result := BaudEntry[i].Name;          // 文字列表現を返す
+      Exit;
+    end;
+  end;
+  Result := 'ﾕｰｻﾞｰ定義';
+end;
+
+
+{ 選択された値を列挙型の値に変換 }
+procedure TBaudProperty.SetValue(const Value: string);
+var
+  i: Integer;
+begin
+  for i := Low(BaudEntry) to High(BaudEntry) do
+  begin
+    if Value = BaudEntry[i].Name then
+    begin
+      SetOrdValue(BaudEntry[i].Value);
+      Exit;
+    end;
+  end;
+  raise EPropertyError.Create('Invalid Value');
+end;
+
+
+{ オブジェクトインスペクタのドロップコンボボックスに表示する値を戻す }
+procedure TBaudProperty.GetValues(Proc: TGetStrProc);
+var
+  i: Integer;
+begin
+  for i := Low(BaudEntry) to High(BaudEntry) do
+    Proc(BaudEntry[i].Name);
+end;
+
+
+
+{ コンポーネントの登録 }
+procedure Register;
+begin
+  RegisterComponents('Comm', [TComm]);
+  RegisterPropertyEditor(TypeInfo(Integer), TComm, 'BaudRate', TBaudProperty);
+end;
+
+end.
+

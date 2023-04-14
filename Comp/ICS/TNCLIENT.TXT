@@ -1,0 +1,37 @@
+TNCLIENT is a very basic telnet program with ANSI terminal emulation.
+It is based on various components:
+TWsocket:   Low level TCP/IP socket encapsulation
+TTnCnx:	    TCP/IP telnet protocol
+TEmulVT:    ANSI terminal emulation
+TTnEmultVT: TEmulVT and TTnCnx together
+TWait:      Component to wait for event
+
+There are 3 directories: a main directory with the project source 
+files and two directories with the components: one for 
+Delphi 1 (VC) and one for Delphi 2 and 3 (VC32). All the source code
+is fully compatible with all Delphi versions. Hence the component source
+is duplicated in VC and VC32 subdirectories just for your facility.
+There is only on source file special for Delphi 1: this is WINSOCK.PAS.
+This file must NOT be used with Delphi 2 or Delphi 3 as there is such a
+file accompagning the Borland products. So for Delphi 2 and 3: use the
+Borland WINSOCK.PAS file; for Delphi 1 use the provided WINSOCK.PAS file.
+
+Use the PKUNZIP -d option to unzip the archive or you will mess 
+up all files !
+
+Once it is unzipped, you must install all components 
+in Delphi component palette as you do with any other VCL. Then 
+you can rebuild the application using the project file TnClient.dpr.
+
+If you like my code, let me know. I'll keep you informed for 
+future updates. There is a mailing list for support and info sharing.
+Subscribe by writing an EMail to majordomo@rtfm.be with no subject
+and <subscribe twsocket> in the message body (without the <>). Then you
+can write to twsocket@rtfm.be and everybody will receive your message
+and will will receive everybody's messages.
+
+My EMail addresses are: 
+francois.piette@ping.be
+francois.piette@f2202.n293.z2.fidonet.org
+BBS: +32-4-365.13.95
+Fax: +32-4-365.74.56

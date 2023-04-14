@@ -1,0 +1,11 @@
+TnClient is a basic telnet program with
+ANSI terminal emulation. Compatible
+with all Delphi and C++Builder versions.
+Full source code provided in the zip file.
+The author can be contacted at
+francois.piette@pophost.eunet.be. 
+Support and updates can be found 
+at http://www.rtfm.be/fpiette.
+Unzip using the -d option to restore
+directory tree.
+Freeware.

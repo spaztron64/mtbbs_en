@@ -1,0 +1,8 @@
+[Server]
+name= Cabletron Systems
+server= ctron.com
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

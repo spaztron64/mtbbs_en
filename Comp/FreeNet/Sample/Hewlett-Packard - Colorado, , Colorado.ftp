@@ -1,0 +1,8 @@
+[Server]
+name= Hewlett-Packard - Colorado, , Colorado
+server= col.hp.com
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

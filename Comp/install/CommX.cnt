@@ -1,0 +1,61 @@
+:Base CommX.hlp>main
+:Title CommX  Ver 1.06
+:Index CommX  Ver 1.06 =CommX.hlp
+1 はじめに =HLP000001
+1 プロパティ一覧
+2 PortNoプロパティ =HLP000003
+2 BitRateプロパティ =HLP000004
+2 CharSizeプロパティ =HLP000005
+2 ParityBitプロパティ =HLP000006
+2 StopBitプロパティ =HLP000007
+2 FlowCtrlプロパティ =HLP000008
+2 TimeOutTransプロパティ =HLP000009
+2 TimeOutReceiveプロパティ =HLP000010
+2 XonCharプロパティ =HLP000059
+2 XoffCharプロパティ =HLP000060
+2 BufLenTransプロパティ =HLP000011
+2 BufLenReceiveプロパティ =HLP000012
+2 Handleプロパティ =HLP000037
+1 メソッド一覧
+2 PortOpenメソッド =HLP000014
+2 PortCloseメソッド =HLP000015
+2 TransCharメソッド =HLP000016
+2 TransStringメソッド =HLP000017
+2 TransBlockメソッド =HLP000018
+2 ReceiveCharメソッド =HLP000019
+2 ReceiveBlockメソッド =HLP000020
+2 ClearTransBufメソッド =HLP000021
+2 ClearReceiveBufメソッド =HLP000022
+2 GetTransLengthメソッド =HLP000023
+2 GetReceiveLengthメソッド =HLP000024
+2 SetRtsSignalメソッド =HLP000025
+2 SetDtrSignalメソッド =HLP000026
+2 IsCtsSignalメソッド =HLP000027
+2 IsDsrSignalメソッド =HLP000028
+2 IsRingSignalメソッド =HLP000029
+2 IsRlsdSignalメソッド =HLP000030
+2 SendBreakメソッド =HLP000031
+1 イベント一覧
+2 OnReceiveイベント =HLP000034
+2 OnBreakイベント =HLP000040
+2 OnErrorイベント =HLP000035
+1 操作方法
+2 とりあえず送信してみる =HLP000043
+2 とりあえず受信してみる =HLP000044
+2 制御機器などとの通信 =HLP000051
+1 基礎知識
+2 ＲＳ２３２Ｃ =HLP000046
+2 シリアル通信 =HLP000047
+2 スタートビットとストップビット =HLP000052
+2 ビットレート =HLP000053
+2 ビット数 =HLP000054
+2 パリティビット =HLP000055
+1 Ｑ＆Ａ
+2 質問１ =HLP000049
+2 質問２ =HLP000050
+2 質問３ =HLP000056
+2 質問４ =HLP000061
+1 最後に
+2 サポート情報 =HLP000039
+2 謝辞 =HLP000041
+

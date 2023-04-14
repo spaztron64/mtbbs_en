@@ -1,0 +1,7 @@
+[OPTIONS]
+CONTENTS=context_string
+TITLE=sjisconv
+[CONFIG]
+BrowseButtons()
+[FILES] 
+sjisconv.rtf

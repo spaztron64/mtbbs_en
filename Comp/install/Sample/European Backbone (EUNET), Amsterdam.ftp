@@ -1,0 +1,8 @@
+[Server]
+name= European Backbone (EUNET), Amsterdam
+server= ftp.eu.net
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

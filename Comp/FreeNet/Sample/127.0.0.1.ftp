@@ -1,0 +1,15 @@
+[Server]
+name=127.0.0.1
+server=127.0.0.1
+port=21
+description=
+
+[User]
+user=anonymous
+SavePassword=0
+account=
+Anonymous=0
+
+[Directories]
+Local=
+Remote=

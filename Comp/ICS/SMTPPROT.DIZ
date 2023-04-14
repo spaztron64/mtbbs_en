@@ -1,0 +1,13 @@
+An application which shows
+how to use the TSmtpCli object to send
+EMail on the Internet using the SMTP
+protocol (used by every ISP). The
+component is compatible with all Delphi
+and all C++Builder versions.
+The author can be contacted
+at francois.piette@pophost.eunet.be. 
+Updates can be found at 
+http://www.rtfm.be/fpiette.
+Unzip using the -d option to restore
+directory tree. 
+Freeware with full source code.

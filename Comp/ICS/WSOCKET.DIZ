@@ -1,0 +1,15 @@
+Yet another WinSock Delphi Object ! 
+This one is compatible with all Delphi
+and C++Builder versions (16 and 32 bits).
+It can be used to build client or server, 
+TCP or UDP protocols, SOCKS5 support.
+TWSocket is multithread safe.
+The author can be contacted
+at francois.piette@pophost.eunet.be. Updates
+can be found at http://www.rtfm.be/fpiette.
+Examples can be found on the web site.
+Including Telnet, POP3 and FTP protocol
+components for all Delphi version.
+Unzip using the -d option to restore
+directory tree. 
+Freeware with full source code.

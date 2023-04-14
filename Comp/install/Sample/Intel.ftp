@@ -1,0 +1,16 @@
+[Server]
+name=Intel
+server=ftp.intel.com
+port=21
+description=
+
+[User]
+user=
+password=
+SavePassword=1
+account=
+Anonymous=1
+
+[Directories]
+Local=
+Remote=

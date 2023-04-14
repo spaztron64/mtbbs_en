@@ -1,0 +1,181 @@
+<html>
+
+<head>
+<title>メソッド解説</title>
+<meta http-equiv="Content-Type" content="text/html; charset=x-sjis">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<p><font face="FixedSys" color="#FF0000"><strong>MainCool, PopupCool</strong></font></p>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="GetMenuItemImage">GetMenuItemImage</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys"><font color="#0000FF">function</font> 
+GetMenuItemImage(Item: TMenuItem): Integer;</font></strong></p>
+
+<blockquote>
+  <p>個々のメニューアイテムに指定した，イメージのインデックス番号を取得します。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="GetMenuItemHint">GetMenuItemHint</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys" color="#0000FF">function</font><font face="FixedSys"> 
+GetMenuItemHint(Item: TMenuItem): String;</font></strong></p>
+
+<blockquote>
+  <p>個々のメニューアイテムに指定した，ヒント文字列を取得します。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="ModifyMenuItems">ModifyMenuItems</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys"><font color="#0000FF">prpcedure</font> 
+ModifyMenuItems(MenuItems: TMenuItem);</font></strong></p>
+
+<blockquote>
+  <p>メニューアイテムを動的に追加したり，変更した場合，オーナードローが解除されてしまう場合があります。その場合に再度オーナードローを設定するためのメソッドです。<font
+  color="#FF0000"><strong>Version　1.00</strong></font>　からは，特にこのメソッドを実行する必要性は無くなりました。</p>
+  <p>引数にはメニューのItemsプロパティを指定すると，そのメニューコンポーネントの全てのメニューアイテムに対してメソッドが実行されます。</p>
+  <p><strong>例</strong></p>
+  <p><font face="FixedSys">PopupCool1.ModifyMenuItems(PopupMenu1.Items);</font></p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="SetItem">SetItem</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys"><font color="#0000FF">procedure</font> 
+TCoolMenu.SetItem(Item: TMenuItem; ImageIndex: Integer; Hint: String);</font></strong></p>
+
+<blockquote>
+  <p><font face="FixedSys">メニューアイテムを動的に追加したとき，そのメニューアイテムで使うイメージのインデックス，ヒント文字列を設定するメソッドです。</font></p>
+  <p><strong>例　</strong>新しいメニューアイテムをファイル（F）メニューに追加する。</p>
+  <p><font face="FixedSys"><font color="#0000FF">var<br>
+  </font>&nbsp; NewItem: TMenuItem;<br>
+  &nbsp; NewItemImage: TItemImage;<br>
+  <font color="#0000FF">begin<br>
+  </font>&nbsp; NewItem := TMenuItem.Create(Self);<br>
+  &nbsp; NewItem.Caption := '新しいアイテム';<br>
+  &nbsp; File1.Add(NewItem);<br>
+  &nbsp; MainCool1.SetItem(NewItem, 2, '新しいアイテムのヒント');<br>
+  <font color="#0000FF">end;</font></font></p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="DrawMonoBitmap">DrawMonoBitmap</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys" color="#0000FF">prpcedure</font><font face="FixedSys"> 
+DrawMonoBitmap(Item: TMenuItem; Canvas: TCanvas; Rect: TRect; State: TOwnerDrawState); 
+virtual;</font></strong></p>
+
+<blockquote>
+  <p>OnDrawItemイベントで使えるメソッドです。</p>
+  <p>メニューアイテムに指定されたイメージの使用不可状態のイメージを描画します。イメージはImagesプロパティに設定し，ItemImageオブジェクトで指定したインデックスのイメージが使用されます。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="DrawSeparator">DrawSeparator</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys" color="#0000FF">prpcedure</font><font face="FixedSys"> 
+DrawSeparator(Canvas: TCanvas; Rect: TRect); virtual;</font></strong></p>
+
+<blockquote>
+  <p>OnDrawItemイベントで使えるメソッドです。</p>
+  <p>セパレーターの区切り線を描画するメソッドです。セパレーターのメニュー領域の上下の中心に区切り線が引かれます。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="DrawCaptions">DrawCaptions</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys" color="#0000FF">prpcedure</font><font face="FixedSys"> 
+DrawCaptions(Item: TMenuItem; Canvas: TCanvas; Rect: TRect; State: TOwnerDrawState); 
+virtual;</font></strong></p>
+
+<blockquote>
+  <p>OnDrawItemイベントで使えるメソッドです。</p>
+  <p>メニュアイテムの文字列を描画します。CanvasのFontの設定をすれば自由な書体・サイズでキャプションの表示が可能になります。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="DrawButton">DrawButton</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys" color="#0000FF">prpcedure</font><font face="FixedSys"> 
+DrawButton(Item: TMenuItem; Canvas: TCanvas; Rect: TRect; State: TOwnerDrawState); 
+virtual;</font></strong></p>
+
+<blockquote>
+  <p>OnDrawItemイベントで使えるメソッドです。</p>
+  <p>Office97アプリケーションのような選択ボタン表示効果を描画できます。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="DrawImages">DrawImages</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys" color="#0000FF">prpcedure</font><font face="FixedSys"> 
+DrawImages(Item: TMenuItem; Canvas: TCanvas; Rect: TRect; State: TOwnerDrawState); 
+virtual;</font></strong></p>
+
+<blockquote>
+  <p>OnDrawItemイベントで使えるメソッドです。</p>
+  <p>メニューアイテムのイメージを描画するメソッドです。イメージはImagesプロパティに設定し，ItemImageオブジェクトで指定したインデックスのイメージが使用されます。</p>
+  <p>　</p>
+</blockquote>
+
+<hr>
+
+<p><font face="FixedSys" color="#FF0000"><strong>CoolMenuBar</strong></font></p>
+
+<hr>
+
+<p><strong><font face="FixedSys"><a name="ResetMenuBar">ResetMenuBar</a>　メソッド</font></strong></p>
+
+<p><strong><font face="FixedSys" color="#0000FF">prpcedure</font><font face="FixedSys"> 
+ResetMenuBar;</font></strong></p>
+
+<blockquote>
+  <p>実行時，動的にTmainMenuのメニューバー領域のメニューアイテムの変更（削除・追加等）を行った場合に，このメソッドを実行します。<br>
+  実行しない場合，メニューのオーナードローが解除されてしまうことがあるため，動的変更した場合必ず実行してください。</p>
+</blockquote>
+
+<p>　</p>
+
+<blockquote>
+  <p><strong>例　</strong>新しいメニューアイテムをファイル（F）メニューに追加し，メニューバーを再描画させる。</p>
+</blockquote>
+
+<blockquote>
+  <p><font face="FixedSys"><font color="#0000FF">var<br>
+  </font>&nbsp; NewItem: TMenuItem;<br>
+  &nbsp; NewItemImage: TItemImage;<br>
+  <font color="#0000FF">begin<br>
+  </font>&nbsp; NewItem := TMenuItem.Create(Self);<br>
+  &nbsp; NewItem.Caption := '新しいアイテム';<br>
+  &nbsp; File1.Add(NewItem);<br>
+  &nbsp; MainCool1.SetItem(NewItem, 2, '新しいアイテムのヒント');<br>
+  &nbsp; CoolMenuBar1.ResetMenuBar;<br>
+  <font color="#0000FF">end;</font></font></p>
+</blockquote>
+
+<hr>
+</body>
+</html>

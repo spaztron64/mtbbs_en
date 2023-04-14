@@ -1,0 +1,8 @@
+[Server]
+name= U.S. National Inst. of Health
+server= ftp.cu.nih.gov
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

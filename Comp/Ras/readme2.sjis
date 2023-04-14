@@ -1,0 +1,58 @@
+======================================================================
+【デ ータ 名】  TRAS Component for Delphi 3.0 32 bit!
+【登  録  名】  RAS100.ZIP
+【公  開  日】　97/9/30
+【開  発  者】　rayesper / (TDA00007@niftyserve.or.jp)
+【動作  環境】　Delphi2.0/3.0 Windows 95 / NT4.0J
+【作成  方法】  Winzip等で展開してください
+【開発  環境】　Windows NT4.0J / Delphi 3.0
+【種      別】  フリーソフトウェアー
+【転載  条件】  自由
+======================================================================
+【紹介】
+
+
+TRAS Component for Delphi 3.0 32 bit!
+-------------------------------------
+
+Delphiから、ダイアルアップネットワークを簡単に使用するコンポーネントです。
+ネットワークの接続、切断、ステータスの取得などができます。
+
+"Daniel Polistchuck" <danpol@simples.com.br>氏のＴＲＡＳコンポーネントを
+改造し、原作者の許可を得て公開するものです。
+
+変更点一覧
+・Windows95 / NT4.0に対応しました（もとはWindows95専用）。
+・ダイアルアップネットワーク(95)／リモートアクセスサービス(NT)が
+  インストールされていない環境でも起動ができるようにしました。
+・fRASAPIプロバティを追加（Rasapi32.dllの存在チェック用）
+  実行時0:でRAS使用可能、1:以上Rasapi32.dllがインストールされていない
+・GetConnectionsでメモリリークするバグの修正
+・終了時自動的に回線を切断しないように変更。
+
+使用方法
+Rascomp32.pasを[コンポーネント]-[コンポーネントのインストール]から
+インストールしてください。
+
+もともと、詳しいＤＯＣは付いていないので、使用方法等はソース、サンプル
+プログラムを参照してください。
+
+
+* RAS_API32.pas
+- reprogramed to use dynamic loading DLL.
+- RAS_DLL = 'RASAPI32.DLL'; -> added ".DLL" for Windows NT
+- RasApiFlag -> check rasapi32.dll for fRASAPI(Rascomp32.pas) 
+
+* Rascomp32.pas
+- fRASAPI       -> check rasapi32.dll
+- TRAS.Destroy  -> remove "IntDisconnect"
+- TRAS.GetConnections -> debug memory-leakege
+
+なお、古いreadme.txtのdanpol@br.homesopping.com.brのメールアドレスは、
+上記のものに変更になっているようです。
+
+もとになったTRAS Componentを製作し、また私が変更したコンポーネントを
+公開することも快く承諾していただいたDaniel Polistchuck氏に感謝いたします。
+
+【RAS100.ZIP】の名前でダウンロードしてください。
+

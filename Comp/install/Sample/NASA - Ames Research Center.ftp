@@ -1,0 +1,8 @@
+[Server]
+name= NASA - Ames Research Center, , California
+server= explorer.arc.nasa.gov
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

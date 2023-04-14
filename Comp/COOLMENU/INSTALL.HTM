@@ -1,0 +1,81 @@
+<html>
+
+<head>
+<title>CoolMenu98のインストール</title>
+<meta http-equiv="Content-Type" content="text/html; charset=x-sjis">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<p><strong><font face="Times New Roman"><em><font SIZE="6" COLOR="#ff0000">C</font><font SIZE="6" COLOR="#e3001c">o</font><font SIZE="6" COLOR="#c70038">o</font><font SIZE="6" COLOR="#aa0055">l</font><font SIZE="6" COLOR="#8e0071">M</font><font SIZE="6" COLOR="#72008d">e</font><font SIZE="6" COLOR="#5500aa">n</font><font SIZE="6" COLOR="#3900c6">u</font><font SIZE="6" COLOR="#1d00e2">9</font><font SIZE="6" COLOR="#0000ff">8</font></em></font><font color="#0000FF"><big>　のインストール</big></font></strong></p>
+
+<blockquote>
+  <p><font color="#000000"><strong>CoolMenu98インストールファイル</strong></font></p>
+  <blockquote>
+    <p><font color="#FF0000"><strong>Cool_Reg.PAS　インストール用ユニットファイル<br>
+    Cool_Reg.DCR　コンポーネントパレット用ビットマップリソースファイル</strong></font></p>
+  </blockquote>
+  <p><font color="#000000"><strong>TMainCool，TPopupCool　コンポーネント</strong></font></p>
+  <blockquote>
+    <p><font color="#FF0000"><strong>CoolMenu.DCU　コンパイル済みコンポーネント本体<br>
+    CoolMenu.RES　コンポーネントで使用するビットマップリソース<br>
+    SysMenu.RES　コンポーネントで使用するビットマップリソース</strong></font></p>
+  </blockquote>
+  <p><font color="#000000"><strong>TCoolMenuBar　コンポーネント</strong></font></p>
+  <blockquote>
+    <p><font color="#FF0000"><strong>CoolMBar.DCU　コンパイル済みコンポーネント本体<br>
+    CoolMBar.RES　コンポーネントで使用するビットマップリソース</strong></font></p>
+  </blockquote>
+  <p><font color="#000000"><strong>MenuImage Editor　コンポーネントエディター</strong></font></p>
+  <blockquote>
+    <p><font color="#FF0000"><strong>EMenuImg.DCU　コンパイル済みコンポーネントエディター<br>
+    EMenuImg.DFM　コンポーネントエディターフォーム</strong></font></p>
+  </blockquote>
+  <p><font color="#000000"><strong>TMenuItemProperty &nbsp;&nbsp; 
+  プロパティエディター<br>
+  TPopupCoolProperty&nbsp; プロパティエディター<br>
+  TMainCoolProperty&nbsp;&nbsp;&nbsp; プロパティエディター<br>
+  <a name="TCoolMenuBarEditor コンポーネントエディター">TCoolMenuBarEditor 
+  コンポーネントエディター</a></strong></font></p>
+  <blockquote>
+    <p><font color="#FF0000"><strong>CoolEdit.DCU　コンパイル済み（プロパティ・コンポーネント）エディター</strong></font></p>
+  </blockquote>
+  <p>以上の１０個のファイルを任意の同一フォルダーにコピーします。</p>
+  <p>Delphiのメニューから，[コンポーネント（C）｜コンポーネントのインストール（I）...]をクリックします。</p>
+  <p>[コンポーネントのインストール]ダイアログで，[既存のパッケージへ追加｜新規パッケージに追加]の何れかの方法を選択後，[ユニットファイル名]に，<big><strong><font color="#FF0000">Cool_Reg.PAS</font></strong></big>を指定します。（フォルダーのパス付き）</p>
+  <p>[OK]ボタンをクリックすれば，インストールは完了です。パレットに，Nakanonが追加され，MainCoolとPopupCool及びCoolMenuBarの３つのコンポーネントが登録されます。</p>
+  <p>詳しくは，Delphiユーザーズガイドの102ページ，192ページ等を参照してください。</p>
+  <hr>
+</blockquote>
+
+<p><font color="#0000FF"><strong>MenuImage Editorコンポーネントエディター</strong></font></p>
+
+<blockquote>
+  <p>CoolMenuコンポーネントでは，メニューアイテムに表示するアイコンを指定するための便利なコンポーネントエディターが用意されています。</p>
+  <p>MainCoolコンポーネント・PopupCoolコンポーネントをダブルクリックするか，マウスの右クリックで表示されるメニュー項目　[ 
+  <font color="#FF0000">メニュー項目イメージの設定...</font> ]　をクリックすると，以下のようなコンポーネントエディターのダイアログが表示されます。</p>
+  <p><img src="images/editor.jpg" WIDTH="519" HEIGHT="366"></p>
+  <p><a name="PopupMenuがうまく表示されないときは．．．．"><strong><font color="#008000">PopupMenuがうまく表示されないときは．．．．</font></strong></a></p>
+  <p>PopupCoolを使ったとき，実行時にポップアップメニューがうまく表示されないことがあります。（TTimerコンポーネントを一緒に使っているようなとき）そういった場合は，TPopupCoolコンポーネントを選択し，マウスの右クリックで表示されるメニュー項目　[ 
+  <font color="#FF0000">コンポーネントインデックスの変更</font>]　をクリックすると，TPopupMenuコンポーネントとTPopupCoolコンポーネントの親フォーム上での，コンポーネントインデックスを可能な限り「０」に近くして，TTimerコンポーネントよりも早く生成されるように設定します。こうすることによって，ポップアップメニューの表示が可能になります。</p>
+  <hr>
+</blockquote>
+
+<p><strong><font color="#0000FF">TMenuItemProperty &nbsp;&nbsp; 
+プロパティエディター<br>
+TPopupCoolProperty&nbsp; プロパティエディター<br>
+TMainCoolProperty&nbsp;&nbsp;&nbsp; プロパティエディター</font></strong></p>
+
+<blockquote>
+  <p>オブジェクトインスペクター上で，MainCool・PopupCoolのプロパティの設定をすることを支援するためのプロパティエディターです。</p>
+</blockquote>
+
+<p><a name="TCoolMenuBarEditor コンポーネントエディター"><strong><font color="#0000FF">TCoolMenuBarEditor コンポーネントエディター</font></strong></a></p>
+
+<blockquote>
+  <p>CoolMenuBarコンポーネント上で，マウスを右クリックすると表示されるメニューの，一番上の項目「<font color="#FF0000">メニュー項目の再描画</font>」を実行すると，現在のMainMenuのメニューバー項目の変更をCoolMenuBarに反映させることができます。</p>
+  <hr>
+</blockquote>
+</body>
+</html>

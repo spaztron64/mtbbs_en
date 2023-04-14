@@ -1,0 +1,8 @@
+[Server]
+name= Walnut Creek CDROM, Walnut Creek, California
+server= ftp.cdrom.com
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

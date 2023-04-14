@@ -1,0 +1,8 @@
+[Server]
+name= Electronic Frontier Foundation
+server= ftp.eff.org
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

@@ -1,0 +1,53 @@
+TFileList
+a File ListView component for Delphi 2
+© Amedeo Lanza di Casalanza <amldc@tin.it>
+
+description:
+
+ TFileList is a TCustomListView descendant wich encapsulates some system 
+functions to behave somehow like an Explorer's file window. It can  show file 
+informations ignored by Explorer's window.
+
+Files in the original release:
+FileList.pas	Delphi units containing TFileList class source
+FileList.dcr	Resource file with TFileList bitmap
+FileList.rtf	Docs in RTF format
+FListxxx.txt	Readme file
+FListxxx.inf	inf file for upload to DSP
+MaskSearch.pas	Utility unit from the MstGrep.zip archive (by Marcus
+		Stephany). This is included since i modified it, please check
+		on DSP for original release of MstGrep.
+
+Usage
+
+ Just drop a TFileList on a form, add a DirList (or better a DirTree by 
+Markus Stephany) and a line of code to update the FileList's Directory 
+property upon changing of DirList's Directory. Also you may wanto to add 
+a FilterComboBox (or/and a PathComboBox by Angus Johnson) and again 
+write a line of code to update the TFileList's Mask upon changing of 
+FilterComboBox's one.
+
+ You may customize columns' captions and width using the  SectColCaption 
+and SetColWidth public procedures.
+
+ You can then add file masks using the AddMask procedure. Be warned that 
+TFileList defaults to '*.*', so you have to set Mask to an empty string 
+before adding masks.
+
+ You can then add file masks using the AddMask procedure. Be warned that 
+TFileList defaults to '*.*', so you have to set Mask to an empty string before 
+adding masks.
+
+Examples
+
+ You may look at the XEXPLxxx.ZIP archive on DSP freeware section for sample
+program using TFileList component.
+
+Please see FileList.rtf for further informations and license condition.
+
+ suggestions, bug reports & comments to the author:
+
+   Amedeo Lanza di Casalanza
+   from: Torino, Italy
+   mailto:amldc@tin.it
+   http://volftp.tin.it/IT/IT/COLLABORAZIONI/LANZA/amlsoft/index.htm

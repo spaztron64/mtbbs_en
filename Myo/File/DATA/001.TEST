@@ -1,0 +1,45 @@
+				/*	Adjust these as needed		*/
+	baudrate(19200);
+	stopbits(1);		/*	Stop bits			*/
+	databits(8);		/*	Data bits			*/
+	parity(0);		/*	Parity				*/
+	flowctrl(1);		/*	Type of flow control		*/
+	shiftctrl(0);		/* 					*/
+	echo(0);		/*	Local echo			*/
+	dn_cr(0);		/*					*/
+	up_cr(1);		/*					*/
+	dn_kanji(0);		/*					*/
+	up_kanji(1);		/*					*/
+	charpace(0);		/*					*/
+	txpace(0);		/*					*/
+	breaklength(200);	/*					*/
+	console(25);		/*	Console rows			*/
+	colormode(1);		/*	Color 				*/
+	modem(1);		/*	Init modem	+++ATH0		*/
+
+	message("\r\n《　Ｃｏｎｎｅｃｔｉｎｇ　ｔｏ　ｓｔａｇｉｎｇ　ＢＢＳ．．．　》\r\n\r\n");
+
+	/* I start with the hopefully correct assumption that you have configured    */
+	/* your modem. If you did not, do so before starting the script.	     */
+
+Connect:
+	transmit("AT\n\r");				/* Startup insurance 	     */
+	pause(500);
+	transmit("ATC1\r");				/* Connect to WLAN 	     */
+	waitfor("OK");					/* Hopefully it worked 	     */
+	pause(500);
+	transmit("ATDTdefiance.lameguy64.net:6502\r");  /* Dial the bbs 	     */
+
+Peek:
+	find("CONNECT",Login);				/* Huzzah! 		     */
+	find("BUSY",Connect);				/* Let's try again...        */
+	find("NO",Connect);
+	goto Peek;					/* No reply yet. Let's wait. */
+
+Login:
+	init();
+	waitfor("User ID  = ");
+	transmit("Your user id goes here\r");		/* Please change this. 	     */
+	waitfor("Password = ");
+	transmit("Your password goes here\r");		/* And don't remove the \r！ */
+

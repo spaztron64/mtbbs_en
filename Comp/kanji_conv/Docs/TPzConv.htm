@@ -1,0 +1,249 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=x-sjis">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>TPzConv リファレンス</title>
+</head>
+
+<body bgcolor="#FFFFFF" topmargin="30">
+<div align="center"><center>
+
+<table border="0" cellspacing="0" width="100%" bgcolor="#800000">
+    <tr>
+        <td><a name="compo"></a><font color="#FFFF80"><strong>TPzConv</strong></font><font
+        color="#FFFF80" size="4"><strong> コンポーネント
+        リファレンス</strong></font></td>
+    </tr>
+</table>
+</center></div>
+
+<p>継承元： TComponent</p>
+
+<p><strong>プロパティ</strong></p>
+
+<blockquote>
+    <p><a href="#JisByteCodeType">JisByteCodeType</a><br>
+    <a href="#JisKanaConvType">JisKanaConvType</a><br>
+    </p>
+</blockquote>
+
+<p><strong>メソッド</strong></p>
+
+<blockquote>
+    <p><a href="#Create">Create</a><br>
+    <a href="#JisToSjis">JisToSJis</a><br>
+    <a href="#SJisToJis">SJisToJis</a><br>
+    <a href="#EucToSJis">EucToSJis</a><br>
+    <a href="#SJisToEuc">SJisToEuc</a><br>
+    <a href="#B64Encode">B64Encode</a><br>
+    <a href="#B64Decode">B64Decode</a><br>
+    <a href="#MIMEHeaderEncode">MIMEHeaderEncode</a><br>
+    <a href="#MIMEHeaderDecode">MIMEHeaderDecode</a><br>
+    <a href="#WebEncode">WebEncode</a><br>
+    <a href="#WebDecode">WebDecode</a><br>
+    </p>
+    <p>　</p>
+</blockquote>
+
+<p>　</p>
+<div align="center"><center>
+
+<table border="0" cellspacing="0" width="100%" bgcolor="#008080">
+    <tr>
+        <td><font color="#FFFF80" size="4"><strong>プロパティ</strong></font></td>
+    </tr>
+</table>
+</center></div>
+
+<p><a name="JisByteCodeType"><strong>JisByteCodeType</strong></a><strong>:
+TJisByteCodeType</strong></p>
+
+<p>JISコードの際の1バイトコードのモード設定をします。</p>
+
+<blockquote>
+    <p><strong>btAscii</strong>： Asciiコードに設定します
+    'ESC(B'が付加される <strong>（デフォルト値）</strong><br>
+    <strong>btRoman</strong>： Romanコードに設定します
+    'ESC(J'が付加される<br>
+    </p>
+    <p>　</p>
+</blockquote>
+
+<p><a name="JisKanaConvType"><strong>JisKanaConvType</strong></a><strong>:
+TJisKanaConvType</strong></p>
+
+<p>JIS,EUC変換の際半角カナの扱い方法</p>
+
+<blockquote>
+    <p><strong>ktNone</strong>： 何もしない<br>
+    <strong>ktZenWithDaku</strong>： 濁点を含む2バイトコードに変換する<strong>（デフォルト値）</strong><br>
+    例： ﾋﾞﾋﾞﾃﾞ -&gt; ビビデ<br>
+    <strong>ktZenSepaDaku</strong>：
+    濁点を含まず別々にして変換する<br>
+    例： ﾊﾞﾋﾞﾃﾞ -&gt; ハﾞヒﾞテﾞ<br>
+    </p>
+</blockquote>
+
+<blockquote>
+    <p>※どちらのプロパティもデフォルト値のままで特に問題ありません</p>
+</blockquote>
+
+<blockquote>
+    <p>　</p>
+    <p>　</p>
+</blockquote>
+<div align="center"><center>
+
+<table border="0" cellspacing="0" width="100%" bgcolor="#008080">
+    <tr>
+        <td><font color="#FFFF80" size="4"><strong>メソッド</strong></font></td>
+    </tr>
+</table>
+</center></div>
+
+<p><a name="Create"><strong>Create</strong></a></p>
+
+<p>コンストラクタ<br>
+constructor Create(AOwner: TComponent); override;</p>
+
+<p>　</p>
+
+<p>　</p>
+
+<p><a name="JisToSjis"><strong>JisToSjis</strong></a></p>
+
+<p>文字列をJISからShiftJISにコード変換する<br>
+function JisToSJis(const s: AnsiString): AnsiString;</p>
+
+<blockquote>
+    <p>sにJIS文字列を指定するとShiftJISコードが戻り値に入る<br>
+    </p>
+    <p>　</p>
+</blockquote>
+
+<p><a name="SJisToJis"><strong>SJisToJis</strong></a></p>
+
+<p>文字列をShiftJISからJISにコード変換する<br>
+function SJisToJis(const s: AnsiString): AnsiString;</p>
+
+<blockquote>
+    <p>sにShiftJIS文字列を指定するとJISコードが戻り値に入る<br>
+    プロパティJisKanaConvTypeの設定によって半角カタカナの扱いが変化します<br>
+    </p>
+</blockquote>
+
+<p>　</p>
+
+<p><a name="EucToSJis"><strong>EucToSJis</strong></a></p>
+
+<p>文字列をEUCからShiftJISにコード変換する<br>
+function EucToSJis(const s: AnsiString): AnsiString;</p>
+
+<blockquote>
+    <p>sにEUC文字列を指定するとShiftJISコードが戻り値に入る<br>
+    ※2bytes固定EUCはサポートしていませんが、現在ほとんど使われていません<br>
+    </p>
+    <p>　</p>
+</blockquote>
+
+<p><a name="SJisToEuc"><strong>SJisToEuc</strong></a></p>
+
+<p>文字列をShiftJISからEUCにコード変換する<br>
+function SJisToEuc(const s: AnsiString): AnsiString;</p>
+
+<blockquote>
+    <p>sにShiftJIS文字列を指定するとEUCコードが戻り値に入る<br>
+    プロパティJisKanaConvTypeの設定によって半角カタカナの扱いが変化します<br>
+    ※2bytes固定EUCはサポートしていませんが、現在ほとんど使われていません<br>
+    </p>
+</blockquote>
+
+<p>　</p>
+
+<p><a name="B64Encode"><strong>B64Encode</strong></a></p>
+
+<p>Base64コードにエンコードする<br>
+function B64Encode(const s: AnsiString): AnsiString;<br>
+</p>
+
+<p>　</p>
+
+<p><a name="B64Decode"><strong>B64Decode</strong></a></p>
+
+<p>Base64コードをデコードする<br>
+function B64Decode(const s: AnsiString): AnsiString;<br>
+</p>
+
+<p>　</p>
+
+<p><a name="MIMEHeaderEncode"><strong>MIMEHeaderEncode</strong></a></p>
+
+<p>MIMEヘッダ部分をエンコードする (JIS＋Base64）<br>
+function MIMEHeaderEncode(const s: AnsiString): AnsiString;</p>
+
+<blockquote>
+    <p>sに文字列を指定すると '=?ISO-2022-JP?B?'
+    の付いたMIMEヘッダにエンコードした符号化文字列が戻り値に入る<br>
+    </p>
+</blockquote>
+
+<p>　</p>
+
+<p><a name="MIMEHeaderDecode"><strong>MIMEHeaderDecode</strong></a></p>
+
+<p>MIMEヘッダ部分をデコードする (JIS＋Base64）<br>
+function MIMEHeaderDecode(const s: AnsiString): AnsiString;</p>
+
+<blockquote>
+    <p>sにMIMEヘッダ文字列を指定するとShiftJISコードが戻り値に入る<br>
+    複数のブロックでエンコード文字列がある場合もすべて変換できます<br>
+    </p>
+</blockquote>
+
+<p>　</p>
+
+<p><a name="WebEncode"><strong>WebEncode</strong></a></p>
+
+<p>Ｗｅｂコードにエンコードする（WEBサーバ等で使われる）<br>
+function WebEncode(const s: AnsiString): AnsiString;</p>
+
+<blockquote>
+    <p>文字列内で８ビット目が”１”の文字を１６進表記”%nn”に変換する
+    <br>
+    スペースは(' ')プラス記号('+')に変換されます<br>
+    </p>
+</blockquote>
+
+<p>　</p>
+
+<p><a name="WebDecode"><strong>WebDecode</strong></a></p>
+
+<p>Ｗｅｂコードにデコードする（WEBサーバ等で使われる）<br>
+function WebDecode(const s: AnsiString): AnsiString;</p>
+
+<blockquote>
+    <p>文字列内のエンコードされた%nn部分を通常の文字に変換する<br>
+    プラス記号('+')はスペース(' ')に変換されます<br>
+    </p>
+</blockquote>
+
+<p>　</p>
+
+<hr width="50%">
+
+<p align="center"><a href="#compo">コンポーネントリファレンストップに戻る</a></p>
+
+<p align="center">----------------------------<br>
+Pz factory<br>
+mailto: <a href="mailto:pzstaff@a2.mbn.or.jp">pzstaff@a2.mbn.or.jp</a><br>
+----------------------------<br>
+</p>
+
+<p align="center">また、このプログラムの一次配布は「Pz
+factoryホームページ」<br>
+<a href="http://plaza11.mbn.or.jp/~pz/">http://plaza11.mbn.or.jp/~pz/</a><br>
+で行っています。</p>
+</body>
+</html>

@@ -1,0 +1,186 @@
+TEditor version up history
+
+ver 0.60 1999/02/22
+・選択状態でＩＭＥ入力しても、選択領域が削除されないバグを修正
+・全角文字を選択した状態で横スクロールさせるとレフトマージン部分にゴミ
+  が残るバグを修正
+・横スクロールした状態で且つ、[EOF] マーク直前にキャレットがある状態
+  から VK_BACK キーを入力して右スクロールした場合、[EOF]の一部がレフト
+  マージン内に描画されてしまうバグを修正
+・GetSelLength のバグを修正
+・VK_UP, VK_DOWN キーのリピート入力で２行スクロールする仕様に変更
+・オートインデントの仕様を変更
+  スペースを入力した後リターンキーを入力してもオートインデントされる
+  ようになった。
+　Delphi のコードエディタのような、上方のスペースに合わせたインデントを
+  行う・行わないを決める PrevSpaceIndent プロパティを新設
+・Paint を override する仕様に変わったので、設計時の不安定感が無くなった
+  nifty:FDELPHI/MES/10/05654 Satobe さん（JCG00336）のアドバイスを参考に
+  させて頂きました。
+・キャレットの居場所を確保するために余計な１行を追加する仕様を廃止した。
+  Row = Lines.Count な場合も発生する
+・WordWrap の実装
+  WordWrap, WrapByte プロパティの新設
+  DeleteRow, RotToLines, ColToChar, ListToFile, ListToStream メソッドの追加
+・published なプロパティが増えた
+  DragCursor, DragMode, OnDragDrop, OnDragOver, OnEndDrag, OnStartDrag
+  Delphi4 版ではさらに
+  Anchors, Constraints, DragKind, OnCanResize, OnEndDock, OnResize, 
+  OnStartDock
+
+ver 0.55 1999/01/07
+・選択領域の描画中に、ReserveWordColor プロパティの値を無視して
+　予約語を別色表示するバグを修正
+・LoadFromFile で $2000 バイト目に #10 があると余分な空白行が挿入
+  されてしまうバグを修正
+
+ver 0.54 1999/01/05
+・どんなフォントサイズでも、半角：全角＝１：２の比率で描画される仕様に
+  変更したので fsBold, fsItalicなフォントスタイルも使用可能になった
+  nifty:FDELPHI/MES/10/05453 Satobe さん（JCG00336）のアドバイスを参考に
+  させて頂きました。
+・VK_PRIOR, VK_NEXT によるスクロール時の静粛性を向上
+・連続スクロール時のキャレットのチラツキを抑制
+・選択領域を描画する際のチラツキを大幅に抑制
+・実行時にフォントを変更してもキャレットサイズが変わらなかったバグを
+  修正
+・キャレットが移動したとき、キャレット幅を、半角・全角文字幅に合わせる
+  仕様に変更
+・選択状態を解除したときアンダーラインが描画されなかったバグを修正
+・マウスによるキャレット移動を行った時、マウスポインタが微妙に移動すると
+  選択状態に入り、アンダーラインが表示されない状態になる不具合を修正
+・LoadFromFile で #26 を読み込まないように変更
+・StrToWordList のバグを修正
+・CharacterMargin プロパティの追加
+・DrawTextRect メソッドの追加
+・SelStrPosition プロパティの追加
+・SelDrawPosition プロパティの追加
+・Selected プロパティの追加
+・ReserveWordFont プロパティの追加
+☆ReserveFontColor プロパティの削除
+
+ver 0.53 1998/11/27
+・たま～に描画されない部分が出現するバグを修正
+・Delphi 4 用の heditor4.dcu を同梱
+
+ver 0.52 1998/11/23
+・空白行に改行マークが描画されないバグを修正
+・アンダーラインを表示する場合は 行間が１ドット増す仕様に変更
+・描画時の静粛性を向上（出来たと思う^^;）
+・[EOF] マークの描画機能の追加
+・Ctrl + ← → によるデリミタ間の移動機能の追加
+・Ctrl + ↑ ↓ による上下スクロール機能の追加
+・DelimDBCS プロパティの追加（全角半角の切り替わりを区切りとして扱う）
+・CharFromPos メソッドの追加
+・StrInfoFromPos メソッドの追加
+・WordFromPos メソッドの追加
+・StrToWordList メソッドの追加
+・ExpandTab メソッドの公開
+・OnTopRowChange イベントの追加
+・OnTopColChange イベントの追加
+・ReserveBkColor プロパティの追加（復活^^;）
+・DefaultDrawing プロパティの追加
+・DrawAllWords プロパティの追加
+・OnBeforeDrawWord イベントの追加
+・OnDrawLine イベントの追加
+
+★DrawStyle プロパティの削除
+★OnDrawWord イベントの削除
+
+ver 0.51 1998/11/08
+・梱包ファイル内容に手違いがあったので再アップロード
+
+ver 0.50 1998/11/08
+・レフトマージン内に改行マークが描画されてしまうバグを修正
+・文字列後端より右の空白部分に文字入力する場合、それまでの改行マークが
+  取り残されるバグを修正
+・Clear メソッドの不具合を修正
+・LineMargin プロパティの追加
+・TopMargin プロパティの追加
+・DrawStyle プロパティ、OnDrawWord イベントハンドラの追加
+  によって、オーナードローが可能になりました＼(^o^)／
+  
+ver 0.43 1998/11/01
+・画面スクロール時の描画の不具合（結構致命的でした^^;）を修正
+・DeleteSelection, SetSelTextBuf の高速化
+  Undo, Redo に対応した分遅くなっていましたので少し改善しました。
+・サンプルプロジェクトのバグをいくつか^^;修正
+
+ver 0.42 1998/10/30
+・Undo, Redo 時の描画の不具合を修正
+・改行マークの描画機能を持たせました。RetMark プロパティ
+・アンダーラインの描画機能を持たせました。UnderLine プロパティ
+・予約語の背景色指定機能を（ReserveBkColor プロパティ）を削除しました。
+　ver 0.42 をインストール後、既存のプロジェクトファイルを開くと
+  ReserveBkColor プロパティが見つかりませんのエラーになると思いますが
+  無視するボタンをクリックしてください。
+・ver 0.41 は予約語の背景色描画における不具合を修正したものでしたが
+　描画スピードが不満足な出来だったため、公開せずに結局 ReserveBkColor
+  プロパティを削除してしまいました。
+
+ver 0.40 1998/10/24
+・Default = True なボタンがあると、VK_RETURN キーが入力出来なくなる
+  不具合を修正
+・ClearSelection の実装を「選択状態の解除」から「選択領域の削除」に変更
+・文字列保持オブジェクト(TEditorStrings)の宣言を interface 部に移動
+・Delimiters プロパティの追加
+
+☆ Undo オブジェクトを実装しました
+・EditorUndoObj プロパティの追加
+・UndoListMax プロパティの追加
+・CanRedo メソッドの追加
+・CanUndo メソッドの追加
+・Undo メソッドの追加
+・Redo メソッドの追加
+
+ver 0.32  1998/08/19
+・SetSelLength の不具合を修正
+・DeleteSelection の高速化
+・SetSelTextBuf の高速化
+・TopRow = 0 の状態で、VK_PRIOR が入力されたとき、キャレットを最初の行へ
+  移動するように変更
+・CaretFree = False 時にタブ文字を含む行でのキャレット移動の不具合を修正
+・CaretFree = False に設定されると DisposeBlank = False となるように変更
+  これによって、最後尾に空白(#$20)を入力出来なかった不具合を解消
+・タブ文字の展開数をカラム位置によって調節するように変更
+・TabIndent プロパティの追加
+・ClearSelection メソッドの追加
+・CopyToClipboard メソッドの追加
+・CutToClipboard メソッドの追加
+・PasteFromClipboard メソッドの追加
+・SelectAll メソッドの追加
+
+ver 0.31  1998/08/16
+・32,767 + 画面表示可能行数以上のスクロールが出来なかった不具合を修正
+・予約語を入力した際の描画の不具合を修正
+・キャレットが全角文字に入った際の位置調節の不具合を修正
+・全角文字に半角文字を上書きした際の不具合を修正
+・ファイル読み込みの高速化（nifty:FDELPHI/MES/10/04498 大石　剛司 さんの
+  アドバイスを参考にさせていただきました。）
+
+ver 0.30  1998/08/09 
+・横スクロール時画面上部がスクロールされないバグを修正
+・タブ文字に対応
+・SoftTab プロパティの追加
+・CaretInTab プロパティの追加
+・StrIndex メソッドの追加
+・CreateDelimiters メソッドの追加
+・RowHeight プロパティの追加
+・ColWidth プロパティの追加
+・Canvas プロパティの追加
+
+ver 0.21  1998/07/31 
+・ver 0.20 の上書き時のハゲしいチラツキ(^^;)を抑制
+・SetSelLength の不具合を修正
+・SetSelTextBuf の不具合を修正
+・上書きキャレットを統一
+・ReadOnly プロパティでの手抜き(^^;)をきちんと実装
+
+ver 0.20  1998/07/27 
+・Modified プロパティの追加
+・DiaposeBlank プロパティの追加
+・LineDraw の改良によって入力時のチラツキを抑制
+
+ver 0.10  1998/07/25 
+・初版
+

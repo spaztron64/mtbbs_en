@@ -1,0 +1,24 @@
+unit MTT_Main;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  CONSOLE, ExtCtrls, Buttons, StdCtrls;
+
+type
+  TCONSOLEWindow1 = class(TCONSOLEWindow)
+  private
+    { Private êÈåæ }
+  public
+    { Public êÈåæ }
+  end;
+
+var
+  CONSOLEWindow1: TCONSOLEWindow1;
+
+implementation
+
+{$R *.DFM}
+
+end.

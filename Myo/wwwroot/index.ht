@@ -1,0 +1,10 @@
+<html>
+<head>
+	<title>PC-9800 Central Bulletin Board</title>
+</head>
+<body>
+	<?php
+		echo "Die";
+	?>
+</body>
+</html>

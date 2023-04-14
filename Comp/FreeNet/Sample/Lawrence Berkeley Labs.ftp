@@ -1,0 +1,8 @@
+[Server]
+name= Lawrence Berkeley Labs
+server= csam.lbl.gov
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

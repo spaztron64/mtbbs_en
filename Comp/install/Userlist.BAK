@@ -1,0 +1,225 @@
+unit UserList;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls;
+
+type
+  EIndexInvalid = class(Exception);
+
+  IUserList = record
+     UserName : String;
+     Comment  : String;
+     UserComment : String;
+     FullName   : String;
+  end;
+
+  PIUserList = ^IUserList;
+
+  TUserList = class(TComponent)
+  private
+    FIndex : Integer;
+    FCount : Integer;
+    Server : String;
+    FWkstaName : String;
+    List   : TList;
+    IList  : PIUserList;
+    FUserName : String;
+    FComment  : String;
+    FUserComment : String;
+    FFullName    : String;
+    procedure SetIndex( Value : Integer );
+  protected
+    { Protected declarations }
+  public
+    procedure SetItems;
+    constructor Create(AOwner : TComponent); override;
+    destructor Destroy; override;
+  published
+    property UserName : String
+       read FUserName;
+    property Comments : String
+       read FComment;
+    property UserComments : String
+       read FUserComment;
+    property FullName : String
+       read FFullName;
+    property WkstaName : String
+       read FWkstaName
+       write FWkstaName;
+    property ServerName : String
+       read Server
+       write Server;
+    property Count : Integer
+       read FCount
+       write FCount;
+    property Index : Integer
+       read FIndex
+       write SetIndex;
+  end;
+
+  USER_INFO_10 = record
+     usri10_name : LPWSTR;
+     usri10_comment : LPWSTR;
+     usri10_usr_comment : LPWSTR;
+     usri10_full_name : LPWSTR;
+  end;
+
+  USER_INFO_1 = record
+     usri1_name : LPWSTR;
+     usri1_password : LPWSTR;
+     usri1_password_age : DWORD;
+     usri1_priv : DWORD;
+     usri1_home_dir : LPWSTR;
+     usri1_comment : LPWSTR;
+     usri1_flags : DWORD;
+     usri1_script_path : LPWSTR;
+  end;
+
+  WKSTA_INFO_100 = record
+     wksi100_platform_id : DWORD;
+     wksi100_computername : LPWSTR;
+     wksi100_langroup : LPWSTR;
+     wksi100_ver_major : DWORD;
+     wksi100_ver_minor : DWORD;
+  end;
+
+  SERVER_INFO_100 = record
+     sv101_platform_id : DWORD;
+     sv101_name : LPWSTR;
+  end;
+
+  PUSER_INFO_10 = ^USER_INFO_10;
+  PUSER_INFO_1 = ^USER_INFO_1;
+  PWKSTA_INFO_100 = ^WKSTA_INFO_100;
+  PSERVER_INFO_100 = ^SERVER_INFO_100;
+
+function NetWkstaGetInfo(
+     ServerName : LPWSTR;
+     Level : DWORD;
+     var Bufptr : PBYTE ) : DWORD; stdcall; external 'netapi32.dll';
+
+function NetUserEnum(
+         ServerName : LPWSTR;
+         Level : DWORD;
+         Filter : DWORD;
+         var Bufptr : PByte;
+         PrefMaxLen : DWORD;
+         var EntriesRead : DWORD;
+         var TotalEntries : DWORD;
+         var ResumeHandle : DWORD ) : DWORD; stdcall; external 'netapi32.dll';
+
+function NetUserGetInfo(
+         ServerName : LPWSTR;
+         UserName : LPWSTR;
+         Level : DWORD;
+         var Bufptr : PBYTE ) : DWORD; stdcall; external 'netapi32.dll';
+
+function NetServerEnum(
+         ServerName : LPWSTR;
+         Level : DWORD;
+         var Bufptr : PBYTE;
+         prefmaxlen : DWORD;
+         var EntriesRead : DWORD;
+         var TotalEntries : DWORD;
+         ServerType : DWORD;
+         Domain : LPWSTR;
+         var ResumeHandle : DWORD ) : DWORD; stdcall; external 'netapi32.dll';
+
+procedure Register;
+
+implementation
+
+
+procedure TUserList.SetItems;
+var
+   info  : PUSER_INFO_10;
+   info1 : PWKSTA_INFO_100;
+   ent, ResumeHandle : DWORD;
+   i   :   integer;
+   Srv : LPWSTR;
+begin
+   GetMem( Srv, 50 );
+   if Pos( '\\', Server ) = 0 then Server := '\\' + Server;
+   StringToWideChar( Server, Srv, 50 );
+   ResumeHandle := 0;
+   if List.Count > 0 then
+   begin
+     for i:=0 to List.Count-1 do Dispose( IList );
+     List.Clear;
+   end;
+   NetUserEnum( Srv, 10,2, PByte(info), sizeof(USER_INFO_10), ent, FCount, ResumeHandle );
+   for i:=0 to ent-1 do
+   begin
+      New( IList );
+      IList^.UserName := WideCharToString(info^.usri10_name);
+      IList^.Comment := WideCharToString(info^.usri10_comment);
+      IList^.UserComment := WideCharToString(info^.usri10_usr_comment);
+      IList^.FullName := WideCharToString(info^.usri10_full_name);
+      List.Add( Pointer(IList) );
+      Inc(info);
+   end;
+   while ent <> FCount do
+   begin
+     NetUserEnum( Srv, 10, 2, PByte(info), sizeof(USER_INFO_10), ent, FCount, ResumeHandle );
+     for i:=0 to ent-1 do
+     begin
+       New( IList );
+       IList^.UserName := WideCharToString(info^.usri10_name);
+       IList^.Comment := WideCharToString(info^.usri10_comment);
+       IList^.UserComment := WideCharToString(info^.usri10_usr_comment);
+       IList^.FullName := WideCharToString(info^.usri10_full_name);
+       List.Add( Pointer(IList) );
+       Inc(info);
+     end;
+   end;
+   FreeMem( Srv, 50 );
+   NetWkstaGetInfo( nil, 100, PByte(info1) );
+   FWkstaName := WideCharToString(info1.wksi100_computername);
+   FCount := List.Count;
+   Index := 0;
+end;
+
+procedure TUserList.SetIndex( Value : Integer );
+var
+   PList : PIUserList;
+begin
+   if (Value > List.Count) and (List.Count <> 0) then
+   begin
+      raise EIndexInvalid.Create('Index out of bounds' );
+      Exit;
+   end;
+   if List.Count <> 0 then
+   begin
+     PList := List.First;
+     PList := List.Items[ Value ];
+     FUserName := PList^.UserName;
+     FComment := PList^.Comment;
+     FUserComment := PList^.UserComment;
+     FFullName := PList^.FullName;
+     FIndex := FIndex + 1;
+   end;
+end;
+
+constructor TUserList.Create( AOwner : TComponent );
+begin
+   inherited Create( AOwner );
+   List := TList.Create;
+   List.Capacity := 30;
+end;
+
+destructor TUserList.Destroy;
+begin
+   List.Clear;
+   List.Destroy;
+   Inherited Destroy;
+end;
+
+procedure Register;
+begin
+  RegisterComponents('System', [TUserList]);
+end;
+
+end.

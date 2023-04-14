@@ -1,0 +1,122 @@
+<html>
+
+<head>
+<title>オブジェクト継承図</title>
+<meta http-equiv="Content-Type" content="text/html; charset=x-sjis">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<p><strong><font face="Times New Roman"><em><font SIZE="6" COLOR="#ff0000">C</font><font SIZE="6" COLOR="#e3001c">o</font><font SIZE="6" COLOR="#c70038">o</font><font SIZE="6" COLOR="#aa0055">l</font><font SIZE="6" COLOR="#8e0071">M</font><font SIZE="6" COLOR="#72008d">e</font><font SIZE="6" COLOR="#5500aa">n</font><font SIZE="6" COLOR="#3900c6">u</font><font SIZE="6" COLOR="#1d00e2">9</font><font SIZE="6" COLOR="#0000ff">8</font></em></font><big>　<font color="#0000FF">オブジェクト継承図と機能説明</font></big></strong></p>
+
+<p align="center"><img src="images/objects1.gif" WIDTH="619" HEIGHT="262"></p>
+
+<p align="left"><big><font color="#FF0000"><strong>TMainCool　and　TPopupCool</strong></font></big></p>
+
+<ul>
+  <li>TMainCool，TPopupCoolコンポーネントは，その<a href="propertys.htm#property Menu : TMenu" target="main">Menuプロパティ</a>に，それぞれ，<strong>TMainMenu</strong>コンポーネント，<strong>TPopupMenu</strong>コンポーネントを設定することによって，そのメインメニューやポップアップメニューに含まれるメニューアイテムを，オーナードロー化します。</li>
+</ul>
+
+<ul>
+  <li>オーナードロー化された，MenuItemは，表示したいイメージ・文字列のフォント・背景色・背景ビットマップなどを，設計時にプロパティの設定をするだけで，簡単にかっこいいアイコン付のメニューを作る事ができます。<br>
+    つまりオーナードローの為のコーディングをせずとも，それらの処理はコンポーネントがやってくれますのでとても簡単＆便利です。ノンコーディング！！</li>
+</ul>
+
+<ul>
+  <li>勿論，<a href="ivents.htm#property OnDrawItem" target="main">OnDrawItemイベント</a>も備えているため，アプリケーション開発者がコーディングすることによって，自由にオーナードローすることも可能です。</li>
+</ul>
+
+<ul>
+  <li>MenuItemに表示するためのアイコン（TIcon若しくは，TBitmap）は，別途フォーム上に用意した，TImageListに挿入することができます。クールメニューでは，そのTImageListをプロパティとして参照します。（ListView・TreeView等と同じしくみ）<br>
+    アイコンはLargeImage（32 x 32）とSmallImage（16 x 16）のサイズを選択できます。</li>
+</ul>
+
+<ul>
+  <li>メニューの表示スタイルは，MS Office97アプリケーションライクな，選択アイテムのイメージがボタン形状になるスタイルとWindows95やWindowsNT 
+    4.0の「スタートメニュー」のように選択アイテムがフルリバース状態になるスタイルの選択が可能です。</li>
+</ul>
+
+<ul>
+  <li><a href="propertys.htm#property ShowHint : Boolean" target="main">ShowHintプロパティ</a>によって，選択アイテム上にヒントウィンドウを表示することができます。IE4.0などに見られるような，URLのヒントウィンドウと同じことが実現可能です。</li>
+</ul>
+
+<ul>
+  <li><a href="propertys.htm#property Cursor : TCursor" target="main">Coursorプロパティ</a>によって，メニュー上にマウスカーソルがあるときに，そのマウスカーソルの形状を指定する事ができます。</li>
+</ul>
+
+<ul>
+  <li>Windows98では，システムメニューのメニュー項目が，[ X ]　[ □ ]　[ 
+    ＿ ]等のビットマップ表示されています。TMainCoolコンポーネントでもSysMenuプロパティによって，これと同等な表示することが可能です。</li>
+</ul>
+
+<ul>
+  <li>TTimerコンポーネントとTPopupCoolコンポーネントを一緒に使っている場合，実行時にポップアップメニューがうまく表示されない場合があります。バージョン2.01から<a href="install.htm#PopupMenuがうまく表示されないときは．．．．" target="main">コンポーネントエディター</a>でこの現象の発生がおきないようにしました。</li>
+</ul>
+
+<blockquote>
+  <p>*TBannerは，TPopupCoolだけに使用できるプロパティです。<br>
+  *TSysMenuは，TMainCoolだけに使用できるプロパティです。</p>
+</blockquote>
+
+<p><big><font color="#FF0000"><strong>TCoolMenuBar</strong></font></big> 
+
+<ul>
+  <li>CoolMenuBarコンポーネントは，TMainMenuコンポーネントのメニューバー領域を置換える機能をもつコンポーネントです。<br>
+    CoolMenuBarコンポーネントは，TMainCoolコンポーネントとセットで使用することが可能です。</li>
+</ul>
+
+<ul>
+  <li>フォーム上で直接使ってもよし，さらにTCoolBar上で使うとWindows98のエクスプローラーライクなメニューにすることができます。また，Jordan 
+    Russell氏の<a href="http://www.connect.net/jordanr/" target="_blank">Toolbar97</a>上で使うとOffice97アプリケーションのように，ドッカブルメニューバーにすることが可能になります。</li>
+</ul>
+
+<ul>
+  <li>設計時に，TMainCoolの<a href="propertys.htm#property CoolMenuBar : TCoolMenuBar" target="main">CoolMenuBarプロパティ</a>にCoolMenuBarコンポーネントを指定し，CoolMenuBarコンポーネントの<a href="propertys.htm#property Menu : TMainMenu_2" target="main">Menuプロパティ</a>にTMainMenuコンポーネントを指定するだけで，メニューバー領域のメニューアイテムをCoolMenuBarコンポーネント内に生成します。設計時のフォームにはメニューバー領域が表示されますが，実行時にはCoolMenuBarコンポーネントによって置換えられますので，TMainMenuコンポーネントのメニューバー領域は表示されません。勿論，ノンコーディングでOKです。</li>
+</ul>
+
+<ul>
+  <li>設計時にメインメニューのメニュー項目を後から追加した場合は，<a href="install.htm#TCoolMenuBarEditor コンポーネントエディター" target="main">CoolMenuBarのコンポーネントエディター</a>を使って即座にCoolMenuBarに変更を反映させることが可能です。実行時にメインメニューのメニューバー領域のメニューアイテムを追加，削除等の変更をした場合は，<a href="methods.htm#ResetMenuBar" target="main">ResetMenuBarメソッド</a>を実行するだけでOKです。</li>
+</ul>
+
+<ul>
+  <li>メインメニューのメニューバー項目のメニューアイテムには，必ずアクセラレーターキーを付けてください。</li>
+</ul>
+
+<blockquote>
+  <p><font color="#008040">例 &gt;&gt;　ファイル（F）　編集（E）　表示（V）</font></p>
+</blockquote>
+
+<ul>
+  <li>AltIMEなどの，左Altキーをフックするようなソフトと同時に使用すると，TCoolMenuBarがうまく動作しない可能性があります。</li>
+</ul>
+
+<ul>
+  <li><a name="ToolBar97のToolbarButton97のDropDownMenuにポップアップメニューを指定した場合">ToolBar97のToolbarButton97のDropDownMenuにポップアップメニューを指定した場合</a>，ポップアップメニューがうまく表示させることができません。これを回避するには，ToolBar97 
+    Ver 1.63のTB97.PASの一部を以下のように変更させれば表示させることが可能になります。</li>
+</ul>
+
+<blockquote>
+  <p><font face="FixedSys">procedure TToolbarButton97.Click;<br>
+  　　:<br>
+  　　:<br>
+  　　:<br>
+  with DropdownMenu do begin<br>
+  PopupComponent := Self;<br>
+  { Starting with version 1.54, this avoids using the Popup method<br>
+  of TPopupMenu because it uses the &quot;track right button&quot; flag<br>
+  (which disallowed the &quot;click and drag&quot; selecting motion many<br>
+  people are accustomed to). }<br>
+  if Assigned(OnPopup) then<br>
+  OnPopup (DropdownMenu);<br>
+  <font color="#FF0000">Popup(PopupPoint.X, PopupPoint.Y);</font><br>
+  ////////// 6523 
+  行目を上記のように変更し，下記２行をコメントにする<br>
+  <font color="#008080">//TrackPopupMenu (Handle, AlignFlags[Alignment] or 
+  ButtonFlags[NewStyleControls],<br>
+  // PopupPoint.X, PopupPoint.Y, 0, DropdownList.Window, nil);<br>
+  </font>end;<br>
+  </font></p>
+</blockquote>
+</body>
+</html>

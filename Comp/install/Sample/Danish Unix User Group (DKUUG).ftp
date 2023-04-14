@@ -1,0 +1,8 @@
+[Server]
+name= Danish Unix User Group (DKUUG)
+server= dkuug.dk
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1

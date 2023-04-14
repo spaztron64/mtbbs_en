@@ -1,0 +1,8 @@
+[Server]
+name= Apple Computer
+server= ftp.apple.com
+port=21
+
+[User]
+SavePassword=0
+Anonymous=1
